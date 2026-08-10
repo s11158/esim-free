@@ -224,6 +224,9 @@ button, a, select, summary { -webkit-tap-highlight-color: transparent; }
 .contact-card { padding: 34px !important; border: 1px solid var(--line) !important; border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); }
 .contact-card > span { display: block; margin-bottom: 10px; color: var(--muted-soft); font-size: 11px; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
 .contact-card > a { display: inline-block; margin-bottom: 20px; font-size: clamp(23px, 4vw, 38px); letter-spacing: -.04em; overflow-wrap: anywhere; }
+.demo-frame { padding-top: 0 !important; border-top: 0 !important; }
+.demo-video { display: block; width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--line); border-radius: 18px; background: #07101d; box-shadow: var(--shadow); }
+.demo-note { margin-top: 18px !important; color: var(--muted-soft) !important; font-size: 12px !important; }
 
 html[dir="rtl"] .select-wrap::after { right: auto; left: 2px; }
 html[dir="rtl"] .select-wrap select { padding-right: 0; padding-left: 25px; }

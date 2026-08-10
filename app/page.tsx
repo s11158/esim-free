@@ -504,7 +504,7 @@ export default function Home() {
             <span>esim<span>.free</span></span>
           </a>
           <p>{t.footerTagline}</p>
-          <div className="footer-links"><a href="/pricing/">Pricing</a><a href="/terms/">Terms</a><a href="/privacy/">Privacy</a><a href="/refunds/">Refunds</a><a href="/contact/">Contact</a></div>
+          <div className="footer-links"><a href="/product/">Product</a><a href="/demo/">Demo</a><a href="/pricing/">Pricing</a><a href="/terms/">Terms</a><a href="/privacy/">Privacy</a><a href="/refunds/">Refunds</a><a href="/contact/">Contact</a></div>
         </div>
         <div className="shell legal-row">
           <span>© 2026 esim.free</span>

@@ -11,6 +11,8 @@ type LegalPageProps = {
 };
 
 const LEGAL_LINKS = [
+  ["Product", "/product/"],
+  ["Demo", "/demo/"],
   ["Pricing", "/pricing/"],
   ["Terms", "/terms/"],
   ["Privacy", "/privacy/"],
@@ -28,6 +30,8 @@ export default function LegalPage({ eyebrow, title, lead, children }: LegalPageP
         </Link>
         <div className="nav-actions">
           <div className="nav-links legal-nav-links">
+            <a href="/product/">Product</a>
+            <a href="/demo/">Demo</a>
             <a href="/pricing/">Pricing</a>
             <a href="/contact/">Contact</a>
           </div>
@@ -39,7 +43,7 @@ export default function LegalPage({ eyebrow, title, lead, children }: LegalPageP
         <p className="eyebrow"><span /> {eyebrow}</p>
         <h1>{title}</h1>
         <p>{lead}</p>
-        <span className="legal-updated">Effective 9 August 2026</span>
+        <span className="legal-updated">Effective 10 August 2026</span>
       </header>
 
       <article className="legal-content shell">{children}</article>
