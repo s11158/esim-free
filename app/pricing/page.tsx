@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import LegalPage from "../components/LegalPage";
 
 export const metadata: Metadata = {
-  title: "eSIM plans and pricing — esim.free",
-  description: "Simple prepaid travel eSIM plans sold and supported directly by esim.free.",
+  title: "eSIM plans and pricing — Esim.free",
+  description: "Simple prepaid travel eSIM plans sold and supported directly by Esim.free.",
   alternates: { canonical: "/pricing/" },
 };
 
@@ -27,7 +27,7 @@ function checkoutHref(plan: (typeof PLANS)[number]) {
 
 export default function PricingPage() {
   return (
-    <LegalPage eyebrow="Clear prepaid pricing" title="One payment. No subscription." lead="esim.free sells fixed, premade, data-only travel eSIM plans directly to customers. Each product includes digital delivery, installation instructions and customer support.">
+    <LegalPage eyebrow="Clear prepaid pricing" title="One payment. No subscription." lead="Esim.free sells fixed, premade, data-only travel eSIM plans directly to customers. Each product includes digital delivery, installation instructions and customer support.">
       <section className="pricing-grid" id="plans">
         {PLANS.map((plan) => (
           <article className={`pricing-card${plan.featured ? " pricing-card-featured" : ""}`} key={plan.name}>
@@ -40,21 +40,21 @@ export default function PricingPage() {
               <li>Validity: {plan.duration}</li>
               <li>Data: {plan.data}</li>
             </ul>
-            <a href={checkoutHref(plan)}>Buy from esim.free</a>
+            <a href={checkoutHref(plan)}>Buy from Esim.free</a>
           </article>
         ))}
       </section>
 
       <section>
         <h2>What you are buying</h2>
-        <p>All listed products are premade prepaid digital eSIM data plans sold and supported by esim.free. They are fixed catalogue products, not consultations, custom work or personalised services. They do not include a telephone number, voice calls or SMS unless a product explicitly says otherwise.</p>
+        <p>All listed products are premade prepaid digital eSIM data plans sold and supported by Esim.free. They are fixed catalogue products, not consultations, custom work or personalised services. They do not include a telephone number, voice calls or SMS unless a product explicitly says otherwise.</p>
         <p>The displayed USD price is the one-time price for the selected plan before any tax that must legally be shown at checkout. There are no subscriptions, trials, recurring charges or automatic renewals.</p>
       </section>
 
       <section>
         <h2>Delivery and activation</h2>
         <p>After successful payment, the customer receives an eSIM QR code and installation instructions electronically. Most orders are delivered within minutes. A compatible, carrier-unlocked device and internet access for installation are required.</p>
-        <p>Every purchase starts in the esim.free checkout with the selected product, price and destination already filled in. No order button redirects to an upstream eSIM supplier.</p>
+        <p>Every purchase starts in the Esim.free checkout with the selected product, price and destination already filled in. No order button redirects to an upstream eSIM supplier.</p>
       </section>
 
       <section>

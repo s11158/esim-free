@@ -1,0 +1,33 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "esim-free-payments",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-10",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "ALLOWED_ORIGIN": "https://esim.free",
+    "CATALOG_URL": "https://esim.free/data/catalog.csv",
+    "PAYMENT_WALLET_ADDRESS": "TLwjVQ39DfxSsTRgnuvqBGRuRipZopZogs",
+    "PAYMENT_WINDOW_MINUTES": "60",
+    "TRONGRID_BASE_URL": "https://api.trongrid.io",
+    "USDT_TRC20_CONTRACT": "TXLAQ63Xg1NAzckPwKHvzw7CSEmLMEqcdj"
+  },
+  "secrets": {
+    "required": ["ORDER_HMAC_SECRET"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "esim-free-orders",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "triggers": {
+    "crons": ["* * * * *"]
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
+}

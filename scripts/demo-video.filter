@@ -1,7 +1,7 @@
 [0:v]
 drawbox=x=0:y=0:w=1280:h=720:color=#fbfcf9:t=fill,
 drawbox=x=72:y=60:w=74:h=8:color=#00dcb0:t=fill,
-drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='esim.free':fontcolor=#07101d:fontsize=36:x=72:y=86,
+drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='Esim.free':fontcolor=#07101d:fontsize=36:x=72:y=86,
 drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='Product walkthrough':fontcolor=#07101d:fontsize=70:x=72:y=245:enable='between(t,0,3.999)',
 drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf:text='Prepaid travel eSIM. One payment. Digital delivery.':fontcolor=#6f7888:fontsize=28:x=76:y=350:enable='between(t,0,3.999)',
 drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='01  Choose a fixed plan':fontcolor=#07101d:fontsize=58:x=72:y=185:enable='between(t,4,7.999)',
@@ -18,7 +18,7 @@ drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf:text='Normally
 drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='04  Install and connect':fontcolor=#07101d:fontsize=58:x=72:y=185:enable='between(t,16,19.999)',
 drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf:text='Compatible unlocked eSIM device':fontcolor=#007f67:fontsize=27:x=76:y=310:enable='between(t,16,19.999)',
 drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf:text='Scan the QR code, follow the guide, activate for the destination.':fontcolor=#6f7888:fontsize=28:x=76:y=375:enable='between(t,16,19.999)',
-drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='Support from esim.free':fontcolor=#07101d:fontsize=58:x=72:y=185:enable='between(t,20,24)',
+drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='Support from Esim.free':fontcolor=#07101d:fontsize=58:x=72:y=185:enable='between(t,20,24)',
 drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf:text='Order help  /  Activation help  /  Refund requests':fontcolor=#007f67:fontsize=27:x=76:y=310:enable='between(t,20,24)',
 drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf:text='Pricing  |  Terms  |  Privacy  |  Refunds  |  Contact':fontcolor=#6f7888:fontsize=27:x=76:y=375:enable='between(t,20,24)',
 drawbox=x=72:y=650:w='(1136*t/24)':h=5:color=#00dcb0:t=fill

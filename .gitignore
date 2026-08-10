@@ -1,5 +1,8 @@
 node_modules/
 .next/
 out/
+.wrangler/
+.dev.vars
+worker/.dev.vars
 .DS_Store
 npm-debug.log*

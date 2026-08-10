@@ -3,18 +3,18 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://esim.free"),
-  title: "esim.free — affordable travel eSIM plans",
-  description: "Buy prepaid travel eSIM plans directly from esim.free, with clear prices and worldwide coverage.",
+  title: "Esim.free — affordable travel eSIM plans",
+  description: "Buy prepaid travel eSIM plans directly from Esim.free, with clear prices and worldwide coverage.",
   icons: {
     icon: "/esim-free-logo.png",
     shortcut: "/esim-free-logo.png",
     apple: "/esim-free-logo.png",
   },
   openGraph: {
-    title: "esim.free — affordable travel eSIM plans",
-    description: "Prepaid data-only eSIM plans sold and supported directly by esim.free.",
+    title: "Esim.free — affordable travel eSIM plans",
+    description: "Prepaid data-only eSIM plans sold and supported directly by Esim.free.",
     url: "https://esim.free",
-    siteName: "esim.free",
+    siteName: "Esim.free",
     type: "website",
   },
 };

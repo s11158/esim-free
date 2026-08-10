@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import LegalPage from "../components/LegalPage";
 
-export const metadata: Metadata = { title: "Refund policy — esim.free", description: "Refund eligibility and process for esim.free digital eSIM plans.", alternates: { canonical: "/refunds/" } };
+export const metadata: Metadata = { title: "Refund policy — Esim.free", description: "Refund eligibility and process for Esim.free digital eSIM plans.", alternates: { canonical: "/refunds/" } };
 
 export default function RefundsPage() {
   return (

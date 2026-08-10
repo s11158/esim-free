@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import LegalPage from "../components/LegalPage";
 
-export const metadata: Metadata = { title: "Privacy policy — esim.free", description: "How esim.free collects and uses personal data.", alternates: { canonical: "/privacy/" } };
+export const metadata: Metadata = { title: "Privacy policy — Esim.free", description: "How Esim.free collects and uses personal data.", alternates: { canonical: "/privacy/" } };
 
 export default function PrivacyPage() {
   return (
-    <LegalPage eyebrow="Legal" title="Privacy policy" lead="This policy explains what information esim.free uses to deliver eSIM products, provide support and keep transactions secure.">
-      <section><h2>1. Who controls your data</h2><p>esim.free is the trading brand responsible for the customer information used to operate this website and fulfil eSIM orders. The legal seller is identified at checkout and on the transaction receipt. Privacy enquiries may be sent to <a href="mailto:staskochukov@gmail.com">staskochukov@gmail.com</a>.</p></section>
-      <section><h2>2. Information we collect</h2><p>We may collect your name, email address, destination and selected plan, order and transaction identifiers, support messages, device and browser information, IP address, and technical activation or data-usage status required to deliver and troubleshoot an eSIM. Payment card details are collected directly by the payment processor and are not stored by esim.free.</p></section>
+    <LegalPage eyebrow="Legal" title="Privacy policy" lead="This policy explains what information Esim.free uses to deliver eSIM products, provide support and keep transactions secure.">
+      <section><h2>1. Who controls your data</h2><p>Esim.free is the company responsible for the customer information used to operate this website and fulfil eSIM orders. The legal seller is identified at checkout and on the transaction receipt. Privacy enquiries may be sent to <a href="mailto:staskochukov@gmail.com">staskochukov@gmail.com</a>.</p></section>
+      <section><h2>2. Information we collect</h2><p>We may collect your name, email address, destination and selected plan, order and transaction identifiers, support messages, device and browser information, IP address, and technical activation or data-usage status required to deliver and troubleshoot an eSIM. Payment card details are collected directly by the payment processor and are not stored by Esim.free.</p></section>
       <section><h2>3. Why we use it</h2><p>We use information to process and deliver orders, provide activation support, prevent fraud, keep business and tax records, comply with law, resolve disputes and improve reliability. The legal basis may be performance of a contract, legal obligation, legitimate interests or consent, depending on the activity and your location.</p></section>
       <section><h2>4. Who receives it</h2><p>Information may be shared only as needed with the payment processor or Merchant of Record displayed at checkout, upstream eSIM and mobile-network suppliers, email and customer-support providers, website hosting and security providers, professional advisers and authorities where legally required. These parties receive only the information needed for their role.</p></section>
       <section><h2>5. International transfers</h2><p>Travel connectivity is global, so service providers may process information outside your country. Where required, we use contractual or other lawful safeguards for international transfers.</p></section>

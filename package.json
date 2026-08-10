@@ -9,7 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ignore-pattern out --ignore-pattern .next"
+    "lint": "eslint . --ignore-pattern out --ignore-pattern .next --ignore-pattern .wrangler --ignore-pattern worker/src/worker-configuration.d.ts"
   },
   "dependencies": {
     "next": "16.2.6",
@@ -27,5 +27,5 @@
     "typescript": "5.9.3"
   },
   "type": "module",
-  "displayName": "esim.free"
+  "displayName": "Esim.free"
 }

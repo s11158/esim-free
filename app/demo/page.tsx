@@ -2,16 +2,16 @@ import type { Metadata } from "next";
 import LegalPage from "../components/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Product demo — esim.free",
-  description: "A short walkthrough of the esim.free prepaid travel eSIM purchase and digital delivery flow.",
+  title: "Product demo — Esim.free",
+  description: "A short walkthrough of the Esim.free prepaid travel eSIM purchase and digital delivery flow.",
   alternates: { canonical: "/demo/" },
 };
 
 export default function DemoPage() {
   return (
-    <LegalPage eyebrow="Product demo" title="From plan to connection in minutes." lead="This short walkthrough shows what a customer selects, buys and receives when ordering a prepaid travel eSIM from esim.free.">
+    <LegalPage eyebrow="Product demo" title="From plan to connection in minutes." lead="This short walkthrough shows what a customer selects, buys and receives when ordering a prepaid travel eSIM from Esim.free.">
       <section className="demo-frame">
-        <video className="demo-video" controls playsInline preload="metadata" aria-label="esim.free product and delivery walkthrough">
+        <video className="demo-video" controls playsInline preload="metadata" aria-label="Esim.free product and delivery walkthrough">
           <source src="/esim-free-product-demo.mp4" type="video/mp4" />
           Your browser cannot play this video. Read the <a href="/product/">written product walkthrough</a> instead.
         </video>
@@ -25,7 +25,7 @@ export default function DemoPage() {
           <li>Completing one payment with no subscription or recurring billing.</li>
           <li>Receiving an eSIM QR activation profile and instructions by email.</li>
           <li>Installing the profile on a compatible, carrier-unlocked device.</li>
-          <li>Getting order, activation and refund support from esim.free.</li>
+          <li>Getting order, activation and refund support from Esim.free.</li>
         </ul>
       </section>
 

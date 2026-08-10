@@ -1,4 +1,4 @@
-name: Deploy esim.free to GitHub Pages
+name: Deploy Esim.free to GitHub Pages
 
 on:
   push:

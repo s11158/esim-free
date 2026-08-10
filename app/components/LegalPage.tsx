@@ -24,9 +24,9 @@ export default function LegalPage({ eyebrow, title, lead, children }: LegalPageP
   return (
     <main>
       <nav className="nav shell legal-nav" aria-label="Main navigation">
-        <Link className="brand" href="/" aria-label="esim.free home">
+        <Link className="brand" href="/" aria-label="Esim.free home">
           <Image className="brand-mark" src="/esim-free-logo.png" alt="" width={40} height={40} priority unoptimized />
-          <span>esim<span>.free</span></span>
+          <span>Esim<span>.free</span></span>
         </Link>
         <div className="nav-actions">
           <div className="nav-links legal-nav-links">
@@ -52,13 +52,13 @@ export default function LegalPage({ eyebrow, title, lead, children }: LegalPageP
         <div className="shell footer-row legal-footer">
           <Link className="brand footer-brand" href="/">
             <Image className="brand-mark" src="/esim-free-logo.png" alt="" width={40} height={40} unoptimized />
-            <span>esim<span>.free</span></span>
+            <span>Esim<span>.free</span></span>
           </Link>
           <p>Affordable travel connectivity, delivered digitally.</p>
           <div>{LEGAL_LINKS.map(([label, href]) => <a href={href} key={href}>{label}</a>)}</div>
         </div>
         <div className="shell legal-row">
-          <span>© 2026 esim.free</span>
+          <span>© 2026 Esim.free</span>
           <span>Contact: staskochukov@gmail.com</span>
         </div>
       </footer>

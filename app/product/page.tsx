@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import LegalPage from "../components/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Product and delivery — esim.free",
-  description: "What esim.free sells, how prepaid travel eSIM products are delivered and what customers need to use them.",
+  title: "Product and delivery — Esim.free",
+  description: "What Esim.free sells, how prepaid travel eSIM products are delivered and what customers need to use them.",
   alternates: { canonical: "/product/" },
 };
 
 export default function ProductPage() {
   return (
-    <LegalPage eyebrow="Product overview" title="A premade travel eSIM, delivered digitally." lead="esim.free sells fixed prepaid mobile-data plans for compatible eSIM devices. Choose a destination and plan once; there is no subscription or physical delivery.">
+    <LegalPage eyebrow="Product overview" title="A premade travel eSIM, delivered digitally." lead="Esim.free sells fixed prepaid mobile-data plans for compatible eSIM devices. Choose a destination and plan once; there is no subscription or physical delivery.">
       <section>
         <h2>Exactly what we sell</h2>
         <p>Each product is a premade, data-only travel eSIM plan with a stated destination or region, data allowance, validity period and one-time USD price. The catalogue is standardised: we do not sell consultations, custom development, personalised services, physical SIM cards, trials or recurring subscriptions.</p>
@@ -36,7 +36,7 @@ export default function ProductPage() {
 
       <section>
         <h2>Who provides the service</h2>
-        <p>esim.free is the customer-facing store, seller and support contact. We source eSIM provisioning and mobile connectivity from upstream technology and network suppliers, then offer selected fixed plans in our own catalogue. Customers purchase from esim.free rather than being redirected to an external supplier storefront.</p>
+        <p>Esim.free is the customer-facing store, seller and support contact. We source eSIM provisioning and mobile connectivity from upstream technology and network suppliers, then offer selected fixed plans in our own catalogue. Customers purchase from Esim.free rather than being redirected to an external supplier storefront.</p>
       </section>
 
       <section>

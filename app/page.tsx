@@ -249,9 +249,9 @@ export default function Home() {
   return (
     <main>
       <nav className="nav shell" aria-label={t.navPlans}>
-        <a className="brand" href="#top" aria-label="esim.free">
+        <a className="brand" href="#top" aria-label="Esim.free">
           <Image className="brand-mark" src="/esim-free-logo.png" alt="" width={40} height={40} priority unoptimized />
-          <span>esim<span>.free</span></span>
+          <span>Esim<span>.free</span></span>
         </a>
         <div className="nav-actions">
           <div className="nav-links">
@@ -378,7 +378,7 @@ export default function Home() {
                       {index === 0 && <span className="best">{t.best}</span>}
                       <strong>{price(plan.price, language)}</strong>
                     </div>
-                    <a className="plan-link" href={`/checkout/?${checkoutParams.toString()}`} aria-label={`${t.choose}: esim.free`}>
+                    <a className="plan-link" href={`/checkout/?${checkoutParams.toString()}`} aria-label={`${t.choose}: Esim.free`}>
                       {t.choose} <span aria-hidden="true">→</span>
                     </a>
                   </article>
@@ -434,13 +434,13 @@ export default function Home() {
         <div className="shell footer-row">
           <a className="brand footer-brand" href="#top">
             <Image className="brand-mark" src="/esim-free-logo.png" alt="" width={40} height={40} unoptimized />
-            <span>esim<span>.free</span></span>
+            <span>Esim<span>.free</span></span>
           </a>
           <p>{t.footerTagline}</p>
           <div className="footer-links"><a href="/product/">Product</a><a href="/demo/">Demo</a><a href="/pricing/">Pricing</a><a href="/terms/">Terms</a><a href="/privacy/">Privacy</a><a href="/refunds/">Refunds</a><a href="/contact/">Contact</a></div>
         </div>
         <div className="shell legal-row">
-          <span>© 2026 esim.free</span>
+          <span>© 2026 Esim.free</span>
           <span>{t.legal} · staskochukov@gmail.com</span>
         </div>
       </footer>
