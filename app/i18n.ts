@@ -83,11 +83,26 @@ export type Messages = {
   days: string;
   gb: string;
   mb: string;
+  currencyLabel: string;
+  countrySearch: string;
+  regionsGroup: string;
+  countriesGroup: string;
+  coversLabel: string;
+  multiHint: string;
+  tripDays: string;
+  dataNeeded: string;
+  maxPrice: string;
+  noLimit: string;
+  extrasLabel: string;
+  extrasAny: string;
+  extrasData: string;
+  extrasVoice: string;
+  minutesShort: string;
 };
 
 export const MESSAGES: Record<Language, Messages> = {
   en: {
-    metaTitle: "Esim.free — find the cheapest eSIM for your trip",
+    metaTitle: "Esim.free - find the cheapest eSIM for your trip",
     metaDescription: "Buy affordable prepaid travel eSIM plans directly from Esim.free.",
     navPlans: "Plans", navHow: "How it works", themeToggle: "Switch light and dark theme", languageLabel: "Language",
     heroEyebrow: "Direct prices. No endless tabs.", heroLine1: "The cheapest", heroLine2: "eSIM. Instantly.",
@@ -95,7 +110,7 @@ export const MESSAGES: Record<Language, Messages> = {
     statPlans: "plans available", statCountries: "popular destinations", statMarkup: "external checkout redirects",
     catalogEyebrow: "Plan finder", catalogTitle: "Where are you going?", checked: "Prices checked 08 Aug 2026",
     country: "Destination", data: "Data", duration: "Validity", sort: "Show first", anyData: "Any data", from1: "From 1 GB", from3: "From 3 GB", from10: "From 10 GB", unlimited: "Unlimited",
-    anyDuration: "Any", upToWeek: "Up to 7 days", upToMonth: "8–30 days", overMonth: "Over 30 days", cheapest: "Lowest price", cheapestPerGb: "Lowest per GB", moreData: "Most data",
+    anyDuration: "Any", upToWeek: "Up to 7 days", upToMonth: "8-30 days", overMonth: "Over 30 days", cheapest: "Lowest price", cheapestPerGb: "Lowest per GB", moreData: "Most data",
     offers: "{count} offers", providerPurchase: "Sold and supported by Esim.free", dataLabel: "Data", durationLabel: "Validity", best: "Lowest price", choose: "Choose",
     emptyTitle: "No plans match these filters.", emptyText: "Try changing the data amount or validity.", showMore: "Show more", priceNote: "Coverage can vary with local networks. The displayed plan price is charged by Esim.free before any legally required checkout tax.",
     stepsEyebrow: "Three simple steps", stepsTitle: "Choose. Install. Connect.", compare: "Compare", buy: "Buy", connect: "Connect",
@@ -108,15 +123,16 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "How does Esim.free make money?", answer: "We buy connectivity from upstream suppliers and include a transparent retail margin in the displayed price. Your purchase, delivery and support are handled by Esim.free." },
     ],
     footerTagline: "The shortest route to affordable connectivity.", help: "Help", legal: "Products are sold and fulfilled by Esim.free.", world: "Worldwide", countries180: "180 countries", lifetime: "No expiry", days: "days", gb: "GB", mb: "MB",
+    currencyLabel: "Currency", countrySearch: "Country or region...", regionsGroup: "Regions and multi-country", countriesGroup: "Countries", coversLabel: "{count} countries", multiHint: "Showing plans that cover every selected country.", tripDays: "Trip length", dataNeeded: "Data needed", maxPrice: "Budget", noLimit: "no limit", extrasLabel: "Calls and SMS", extrasAny: "All plans", extrasData: "Data only", extrasVoice: "With minutes and SMS", minutesShort: "min",
   },
   ru: {
-    metaTitle: "Esim.free — самая дешёвая eSIM для поездки", metaDescription: "Купите недорогую туристическую eSIM напрямую у Esim.free.",
+    metaTitle: "Esim.free - самая дешёвая eSIM для поездки", metaDescription: "Купите недорогую туристическую eSIM напрямую у Esim.free.",
     navPlans: "Тарифы", navHow: "Как это работает", themeToggle: "Переключить светлую и тёмную тему", languageLabel: "Язык",
-    heroEyebrow: "Прямые цены. Без лишних вкладок.", heroLine1: "Самая дешёвая", heroLine2: "eSIM — сразу.", heroLead: "Выберите страну. Esim.free напрямую продаёт недорогие предоплаченные eSIM с понятной ценой и собственной поддержкой.", findEsim: "Найти eSIM",
+    heroEyebrow: "Прямые цены. Без лишних вкладок.", heroLine1: "Самая дешёвая", heroLine2: "eSIM - сразу.", heroLead: "Выберите страну. Esim.free напрямую продаёт недорогие предоплаченные eSIM с понятной ценой и собственной поддержкой.", findEsim: "Найти eSIM",
     statPlans: "доступных тарифов", statCountries: "популярных стран", statMarkup: "переходов на чужую оплату",
     catalogEyebrow: "Подбор тарифа", catalogTitle: "Куда едете?", checked: "Цены сверены 08.08.2026", country: "Страна", data: "Интернет", duration: "Срок", sort: "Сначала",
-    anyData: "Любой объём", from1: "От 1 ГБ", from3: "От 3 ГБ", from10: "От 10 ГБ", unlimited: "Безлимит", anyDuration: "Любой", upToWeek: "До 7 дней", upToMonth: "8–30 дней", overMonth: "Больше 30 дней", cheapest: "Дешевле всего", cheapestPerGb: "Дешевле за ГБ", moreData: "Больше интернета",
-    offers: "{count} предложений", providerPurchase: "Продавец и поддержка — Esim.free", dataLabel: "Интернет", durationLabel: "Срок", best: "Самый дешёвый", choose: "Выбрать",
+    anyData: "Любой объём", from1: "От 1 ГБ", from3: "От 3 ГБ", from10: "От 10 ГБ", unlimited: "Безлимит", anyDuration: "Любой", upToWeek: "До 7 дней", upToMonth: "8-30 дней", overMonth: "Больше 30 дней", cheapest: "Дешевле всего", cheapestPerGb: "Дешевле за ГБ", moreData: "Больше интернета",
+    offers: "{count} предложений", providerPurchase: "Продавец и поддержка - Esim.free", dataLabel: "Интернет", durationLabel: "Срок", best: "Самый дешёвый", choose: "Выбрать",
     emptyTitle: "Под этот фильтр тарифов пока нет.", emptyText: "Попробуйте изменить объём интернета или срок действия.", showMore: "Показать ещё", priceNote: "Покрытие зависит от местных сетей. Указанную цену тарифа взимает Esim.free; обязательный налог, если применим, показывается при оплате.",
     stepsEyebrow: "Три простых шага", stepsTitle: "Выбрали. Установили. В сети.", compare: "Сравните", buy: "Купите", connect: "Подключитесь", compareText: "Укажите страну и нужный объём. Дешёвые варианты будут сверху.", buyText: "Безопасно оплатите заказ Esim.free. Мы доставим тариф и окажем поддержку.", connectText: "Отсканируйте QR-код и включите eSIM по инструкции в письме.",
     faqEyebrow: "Коротко о главном", questions: "Вопросы", faqIntro: "Короткие ответы без мелкого шрифта и маркетингового тумана.", choosePlan: "Выбрать тариф",
@@ -127,14 +143,15 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Как Esim.free зарабатывает?", answer: "Мы закупаем связь у поставщиков и включаем прозрачную розничную маржу в указанную цену. Продажу, доставку и поддержку выполняет Esim.free." },
     ],
     footerTagline: "Самый короткий путь к дешёвой связи.", help: "Помощь", legal: "Тарифы продаёт и обслуживает Esim.free.", world: "Весь мир", countries180: "180 стран", lifetime: "Без срока", days: "дн.", gb: "ГБ", mb: "МБ",
+    currencyLabel: "Валюта", countrySearch: "Страна или регион...", regionsGroup: "Регионы и мультистрановые", countriesGroup: "Страны", coversLabel: "{count} стран", multiHint: "Показаны тарифы, покрывающие все выбранные страны.", tripDays: "Длительность поездки", dataNeeded: "Нужно интернета", maxPrice: "Бюджет", noLimit: "без ограничения", extrasLabel: "Звонки и SMS", extrasAny: "Все тарифы", extrasData: "Только интернет", extrasVoice: "С минутами и SMS", minutesShort: "мин",
   },
   es: {
-    metaTitle: "Esim.free — encuentra la eSIM más barata", metaDescription: "Compra planes eSIM de viaje directamente a Esim.free, con precios claros y cobertura mundial.",
+    metaTitle: "Esim.free - encuentra la eSIM más barata", metaDescription: "Compra planes eSIM de viaje directamente a Esim.free, con precios claros y cobertura mundial.",
     navPlans: "Planes", navHow: "Cómo funciona", themeToggle: "Cambiar tema claro u oscuro", languageLabel: "Idioma",
     heroEyebrow: "Venta directa. Precio claro.", heroLine1: "La eSIM más", heroLine2: "barata. Al instante.", heroLead: "Elige un destino. Esim.free vende directamente planes eSIM prepago asequibles, con precios claros y soporte propio.", findEsim: "Buscar una eSIM",
     statPlans: "planes disponibles", statCountries: "destinos populares", statMarkup: "redirecciones a pagos externos",
     catalogEyebrow: "Buscador de planes", catalogTitle: "¿A dónde viajas?", checked: "Precios revisados el 08/08/2026", country: "Destino", data: "Datos", duration: "Validez", sort: "Mostrar primero",
-    anyData: "Cualquier cantidad", from1: "Desde 1 GB", from3: "Desde 3 GB", from10: "Desde 10 GB", unlimited: "Ilimitado", anyDuration: "Cualquiera", upToWeek: "Hasta 7 días", upToMonth: "8–30 días", overMonth: "Más de 30 días", cheapest: "Precio más bajo", cheapestPerGb: "Menor precio por GB", moreData: "Más datos",
+    anyData: "Cualquier cantidad", from1: "Desde 1 GB", from3: "Desde 3 GB", from10: "Desde 10 GB", unlimited: "Ilimitado", anyDuration: "Cualquiera", upToWeek: "Hasta 7 días", upToMonth: "8-30 días", overMonth: "Más de 30 días", cheapest: "Precio más bajo", cheapestPerGb: "Menor precio por GB", moreData: "Más datos",
     offers: "{count} ofertas", providerPurchase: "Vendido y atendido por Esim.free", dataLabel: "Datos", durationLabel: "Validez", best: "Precio más bajo", choose: "Elegir",
     emptyTitle: "No hay planes con estos filtros.", emptyText: "Prueba otro volumen de datos o duración.", showMore: "Ver más", priceNote: "La cobertura depende de las redes locales. Esim.free cobra el precio mostrado; los impuestos obligatorios aparecen al pagar.",
     stepsEyebrow: "Tres pasos simples", stepsTitle: "Elige. Instala. Conecta.", compare: "Compara", buy: "Compra", connect: "Conecta", compareText: "Selecciona destino y datos. Las opciones más baratas aparecen primero.", buyText: "Paga de forma segura a Esim.free. Entregamos y asistimos tu plan.", connectText: "Escanea el código QR y sigue las instrucciones del correo.",
@@ -146,14 +163,15 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "¿Cómo gana dinero Esim.free?", answer: "Compramos conectividad a proveedores mayoristas e incluimos un margen minorista transparente en el precio mostrado. Esim.free gestiona la venta, entrega y soporte." },
     ],
     footerTagline: "El camino más corto hacia una conexión asequible.", help: "Ayuda", legal: "Los productos son vendidos y entregados por Esim.free.", world: "Todo el mundo", countries180: "180 países", lifetime: "Sin caducidad", days: "días", gb: "GB", mb: "MB",
+    currencyLabel: "Moneda", countrySearch: "País o región...", regionsGroup: "Regiones y multipaís", countriesGroup: "Países", coversLabel: "{count} países", multiHint: "Se muestran planes que cubren todos los países seleccionados.", tripDays: "Duración del viaje", dataNeeded: "Datos necesarios", maxPrice: "Presupuesto", noLimit: "sin límite", extrasLabel: "Llamadas y SMS", extrasAny: "Todos los planes", extrasData: "Solo datos", extrasVoice: "Con minutos y SMS", minutesShort: "min",
   },
   fr: {
-    metaTitle: "Esim.free — trouvez l’eSIM la moins chère", metaDescription: "Achetez directement auprès d’Esim.free des forfaits eSIM de voyage à prix clair et couverture mondiale.",
+    metaTitle: "Esim.free - trouvez l’eSIM la moins chère", metaDescription: "Achetez directement auprès d’Esim.free des forfaits eSIM de voyage à prix clair et couverture mondiale.",
     navPlans: "Forfaits", navHow: "Comment ça marche", themeToggle: "Changer de thème clair ou sombre", languageLabel: "Langue",
     heroEyebrow: "Vente directe. Prix clair.", heroLine1: "L’eSIM la moins", heroLine2: "chère. Tout de suite.", heroLead: "Choisissez une destination. Esim.free vend directement des forfaits eSIM prépayés abordables, avec des prix clairs et son propre support.", findEsim: "Trouver une eSIM",
     statPlans: "forfaits disponibles", statCountries: "destinations populaires", statMarkup: "redirections vers un paiement externe",
     catalogEyebrow: "Recherche de forfait", catalogTitle: "Où partez-vous ?", checked: "Prix vérifiés le 08/08/2026", country: "Destination", data: "Données", duration: "Validité", sort: "Afficher d’abord",
-    anyData: "Tout volume", from1: "À partir de 1 Go", from3: "À partir de 3 Go", from10: "À partir de 10 Go", unlimited: "Illimité", anyDuration: "Toute durée", upToWeek: "Jusqu’à 7 jours", upToMonth: "8–30 jours", overMonth: "Plus de 30 jours", cheapest: "Prix le plus bas", cheapestPerGb: "Prix par Go", moreData: "Plus de données",
+    anyData: "Tout volume", from1: "À partir de 1 Go", from3: "À partir de 3 Go", from10: "À partir de 10 Go", unlimited: "Illimité", anyDuration: "Toute durée", upToWeek: "Jusqu’à 7 jours", upToMonth: "8-30 jours", overMonth: "Plus de 30 jours", cheapest: "Prix le plus bas", cheapestPerGb: "Prix par Go", moreData: "Plus de données",
     offers: "{count} offres", providerPurchase: "Vendu et pris en charge par Esim.free", dataLabel: "Données", durationLabel: "Validité", best: "Prix le plus bas", choose: "Choisir",
     emptyTitle: "Aucun forfait ne correspond.", emptyText: "Modifiez le volume de données ou la durée.", showMore: "Afficher plus", priceNote: "La couverture dépend des réseaux locaux. Esim.free facture le prix affiché ; les taxes obligatoires apparaissent au paiement.",
     stepsEyebrow: "Trois étapes simples", stepsTitle: "Choisissez. Installez. Connectez-vous.", compare: "Comparez", buy: "Achetez", connect: "Connectez-vous", compareText: "Choisissez la destination et les données. Les offres les moins chères apparaissent en premier.", buyText: "Payez Esim.free en toute sécurité. Nous livrons et assistons votre forfait.", connectText: "Scannez le QR code et suivez les instructions reçues par e-mail.",
@@ -165,14 +183,15 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Comment Esim.free gagne de l’argent ?", answer: "Nous achetons la connectivité auprès de fournisseurs en gros et intégrons une marge transparente au prix affiché. Esim.free assure la vente, la livraison et l’assistance." },
     ],
     footerTagline: "Le chemin le plus court vers une connexion abordable.", help: "Aide", legal: "Les produits sont vendus et livrés par Esim.free.", world: "Monde entier", countries180: "180 pays", lifetime: "Sans expiration", days: "jours", gb: "Go", mb: "Mo",
+    currencyLabel: "Devise", countrySearch: "Pays ou région...", regionsGroup: "Régions et multi-pays", countriesGroup: "Pays", coversLabel: "{count} pays", multiHint: "Forfaits couvrant tous les pays sélectionnés.", tripDays: "Durée du voyage", dataNeeded: "Données nécessaires", maxPrice: "Budget", noLimit: "sans limite", extrasLabel: "Appels et SMS", extrasAny: "Tous les forfaits", extrasData: "Données seulement", extrasVoice: "Avec minutes et SMS", minutesShort: "min",
   },
   de: {
-    metaTitle: "Esim.free — die günstigste eSIM für deine Reise", metaDescription: "Kaufe Reiseziel-eSIMs mit klaren Preisen und weltweiter Abdeckung direkt bei Esim.free.",
+    metaTitle: "Esim.free - die günstigste eSIM für deine Reise", metaDescription: "Kaufe Reiseziel-eSIMs mit klaren Preisen und weltweiter Abdeckung direkt bei Esim.free.",
     navPlans: "Tarife", navHow: "So funktioniert’s", themeToggle: "Helles oder dunkles Design wählen", languageLabel: "Sprache",
     heroEyebrow: "Direktverkauf. Klare Preise.", heroLine1: "Die günstigste", heroLine2: "eSIM. Sofort.", heroLead: "Wähle ein Reiseziel. Esim.free verkauft günstige Prepaid-eSIM-Tarife direkt, mit klaren Preisen und eigenem Support.", findEsim: "eSIM finden",
     statPlans: "verfügbare Tarife", statCountries: "beliebte Reiseziele", statMarkup: "Weiterleitungen zu externen Zahlungen",
     catalogEyebrow: "Tariffinder", catalogTitle: "Wohin geht’s?", checked: "Preise geprüft am 08.08.2026", country: "Reiseziel", data: "Daten", duration: "Gültigkeit", sort: "Zuerst anzeigen",
-    anyData: "Beliebiges Volumen", from1: "Ab 1 GB", from3: "Ab 3 GB", from10: "Ab 10 GB", unlimited: "Unbegrenzt", anyDuration: "Beliebig", upToWeek: "Bis 7 Tage", upToMonth: "8–30 Tage", overMonth: "Über 30 Tage", cheapest: "Niedrigster Preis", cheapestPerGb: "Preis pro GB", moreData: "Meiste Daten",
+    anyData: "Beliebiges Volumen", from1: "Ab 1 GB", from3: "Ab 3 GB", from10: "Ab 10 GB", unlimited: "Unbegrenzt", anyDuration: "Beliebig", upToWeek: "Bis 7 Tage", upToMonth: "8-30 Tage", overMonth: "Über 30 Tage", cheapest: "Niedrigster Preis", cheapestPerGb: "Preis pro GB", moreData: "Meiste Daten",
     offers: "{count} Angebote", providerPurchase: "Verkauf und Support durch Esim.free", dataLabel: "Daten", durationLabel: "Gültigkeit", best: "Niedrigster Preis", choose: "Wählen",
     emptyTitle: "Keine passenden Tarife gefunden.", emptyText: "Ändere Datenmenge oder Gültigkeit.", showMore: "Mehr anzeigen", priceNote: "Die Abdeckung hängt von lokalen Netzen ab. Esim.free berechnet den angezeigten Preis; Pflichtsteuern erscheinen an der Kasse.",
     stepsEyebrow: "Drei einfache Schritte", stepsTitle: "Wählen. Installieren. Verbinden.", compare: "Vergleichen", buy: "Kaufen", connect: "Verbinden", compareText: "Reiseziel und Datenmenge wählen. Die günstigsten Optionen stehen oben.", buyText: "Sicher an Esim.free zahlen. Wir liefern und unterstützen deinen Tarif.", connectText: "QR-Code scannen und den Anweisungen in der E-Mail folgen.",
@@ -184,14 +203,15 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Wie verdient Esim.free Geld?", answer: "Wir kaufen Konnektivität im Großhandel und rechnen eine transparente Handelsspanne in den angezeigten Preis ein. Verkauf, Lieferung und Support erfolgen durch Esim.free." },
     ],
     footerTagline: "Der kürzeste Weg zu günstiger Verbindung.", help: "Hilfe", legal: "Produkte werden von Esim.free verkauft und geliefert.", world: "Weltweit", countries180: "180 Länder", lifetime: "Kein Ablauf", days: "Tage", gb: "GB", mb: "MB",
+    currencyLabel: "Währung", countrySearch: "Land oder Region...", regionsGroup: "Regionen und Multi-Land", countriesGroup: "Länder", coversLabel: "{count} Länder", multiHint: "Angezeigt werden Tarife, die alle gewählten Länder abdecken.", tripDays: "Reisedauer", dataNeeded: "Benötigte Daten", maxPrice: "Budget", noLimit: "ohne Limit", extrasLabel: "Anrufe und SMS", extrasAny: "Alle Tarife", extrasData: "Nur Daten", extrasVoice: "Mit Minuten und SMS", minutesShort: "Min",
   },
   pt: {
-    metaTitle: "Esim.free — encontre o eSIM mais barato", metaDescription: "Compre planos eSIM de viagem diretamente da Esim.free, com preços claros e cobertura mundial.",
+    metaTitle: "Esim.free - encontre o eSIM mais barato", metaDescription: "Compre planos eSIM de viagem diretamente da Esim.free, com preços claros e cobertura mundial.",
     navPlans: "Planos", navHow: "Como funciona", themeToggle: "Alternar tema claro e escuro", languageLabel: "Idioma",
     heroEyebrow: "Venda direta. Preço claro.", heroLine1: "O eSIM mais", heroLine2: "barato. Na hora.", heroLead: "Escolha um destino. A Esim.free vende diretamente planos eSIM pré-pagos acessíveis, com preços claros e suporte próprio.", findEsim: "Encontrar eSIM",
     statPlans: "planos disponíveis", statCountries: "destinos populares", statMarkup: "redirecionamentos para pagamentos externos",
     catalogEyebrow: "Busca de planos", catalogTitle: "Para onde você vai?", checked: "Preços verificados em 08/08/2026", country: "Destino", data: "Dados", duration: "Validade", sort: "Mostrar primeiro",
-    anyData: "Qualquer volume", from1: "A partir de 1 GB", from3: "A partir de 3 GB", from10: "A partir de 10 GB", unlimited: "Ilimitado", anyDuration: "Qualquer", upToWeek: "Até 7 dias", upToMonth: "8–30 dias", overMonth: "Mais de 30 dias", cheapest: "Menor preço", cheapestPerGb: "Menor preço por GB", moreData: "Mais dados",
+    anyData: "Qualquer volume", from1: "A partir de 1 GB", from3: "A partir de 3 GB", from10: "A partir de 10 GB", unlimited: "Ilimitado", anyDuration: "Qualquer", upToWeek: "Até 7 dias", upToMonth: "8-30 dias", overMonth: "Mais de 30 dias", cheapest: "Menor preço", cheapestPerGb: "Menor preço por GB", moreData: "Mais dados",
     offers: "{count} ofertas", providerPurchase: "Vendido e atendido pela Esim.free", dataLabel: "Dados", durationLabel: "Validade", best: "Menor preço", choose: "Escolher",
     emptyTitle: "Nenhum plano corresponde aos filtros.", emptyText: "Tente alterar os dados ou a validade.", showMore: "Ver mais", priceNote: "A cobertura depende das redes locais. A Esim.free cobra o preço exibido; impostos obrigatórios aparecem no checkout.",
     stepsEyebrow: "Três passos simples", stepsTitle: "Escolha. Instale. Conecte.", compare: "Compare", buy: "Compre", connect: "Conecte", compareText: "Escolha destino e dados. As opções mais baratas aparecem primeiro.", buyText: "Pague com segurança à Esim.free. Entregamos e damos suporte ao seu plano.", connectText: "Escaneie o QR code e siga as instruções do e-mail.",
@@ -203,14 +223,15 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Como o Esim.free ganha dinheiro?", answer: "Compramos conectividade de fornecedores no atacado e incluímos uma margem transparente no preço exibido. A Esim.free cuida da venda, entrega e suporte." },
     ],
     footerTagline: "O caminho mais curto para uma conexão acessível.", help: "Ajuda", legal: "Os produtos são vendidos e entregues pela Esim.free.", world: "Mundo todo", countries180: "180 países", lifetime: "Sem validade", days: "dias", gb: "GB", mb: "MB",
+    currencyLabel: "Moeda", countrySearch: "País ou região...", regionsGroup: "Regiões e multipaís", countriesGroup: "Países", coversLabel: "{count} países", multiHint: "Mostrando planos que cobrem todos os países selecionados.", tripDays: "Duração da viagem", dataNeeded: "Dados necessários", maxPrice: "Orçamento", noLimit: "sem limite", extrasLabel: "Chamadas e SMS", extrasAny: "Todos os planos", extrasData: "Somente dados", extrasVoice: "Com minutos e SMS", minutesShort: "min",
   },
   ar: {
-    metaTitle: "Esim.free — اعثر على أرخص شريحة eSIM", metaDescription: "اشترِ باقات eSIM للسفر مباشرة من Esim.free بأسعار واضحة وتغطية عالمية.",
+    metaTitle: "Esim.free - اعثر على أرخص شريحة eSIM", metaDescription: "اشترِ باقات eSIM للسفر مباشرة من Esim.free بأسعار واضحة وتغطية عالمية.",
     navPlans: "الباقات", navHow: "كيف يعمل", themeToggle: "التبديل بين الوضع الفاتح والداكن", languageLabel: "اللغة",
     heroEyebrow: "بيع مباشر. سعر واضح.", heroLine1: "أرخص شريحة", heroLine2: "eSIM فوراً.", heroLead: "اختر وجهتك. تبيع Esim.free باقات eSIM مسبقة الدفع بأسعار واضحة وتقدم الدعم مباشرة.", findEsim: "ابحث عن eSIM",
     statPlans: "باقة متاحة", statCountries: "وجهة شائعة", statMarkup: "تحويلات إلى دفع خارجي",
     catalogEyebrow: "اختيار الباقة", catalogTitle: "إلى أين ستسافر؟", checked: "تم التحقق من الأسعار في 08/08/2026", country: "الوجهة", data: "البيانات", duration: "الصلاحية", sort: "اعرض أولاً",
-    anyData: "أي حجم", from1: "من 1 GB", from3: "من 3 GB", from10: "من 10 GB", unlimited: "غير محدود", anyDuration: "أي مدة", upToWeek: "حتى 7 أيام", upToMonth: "8–30 يوماً", overMonth: "أكثر من 30 يوماً", cheapest: "الأقل سعراً", cheapestPerGb: "الأقل لكل GB", moreData: "بيانات أكثر",
+    anyData: "أي حجم", from1: "من 1 GB", from3: "من 3 GB", from10: "من 10 GB", unlimited: "غير محدود", anyDuration: "أي مدة", upToWeek: "حتى 7 أيام", upToMonth: "8-30 يوماً", overMonth: "أكثر من 30 يوماً", cheapest: "الأقل سعراً", cheapestPerGb: "الأقل لكل GB", moreData: "بيانات أكثر",
     offers: "{count} عرضاً", providerPurchase: "البيع والدعم من Esim.free", dataLabel: "البيانات", durationLabel: "الصلاحية", best: "الأقل سعراً", choose: "اختر",
     emptyTitle: "لا توجد باقات مطابقة.", emptyText: "جرّب تغيير حجم البيانات أو مدة الصلاحية.", showMore: "عرض المزيد", priceNote: "تعتمد التغطية على الشبكات المحلية. تفرض Esim.free السعر المعروض وتظهر الضرائب الإلزامية عند الدفع.",
     stepsEyebrow: "ثلاث خطوات بسيطة", stepsTitle: "اختر. ثبّت. اتصل.", compare: "قارن", buy: "اشترِ", connect: "اتصل", compareText: "اختر الوجهة وحجم البيانات. تظهر الخيارات الأرخص أولاً.", buyText: "ادفع بأمان إلى Esim.free. نحن نسلّم الباقة ونقدم الدعم.", connectText: "امسح رمز QR واتبع التعليمات المرسلة إلى بريدك.",
@@ -222,14 +243,15 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "كيف يربح Esim.free؟", answer: "نشتري الاتصال بالجملة من الموردين ونضيف هامش بيع شفافاً إلى السعر المعروض. تتولى Esim.free البيع والتسليم والدعم." },
     ],
     footerTagline: "أقصر طريق إلى اتصال بسعر مناسب.", help: "المساعدة", legal: "تبيع Esim.free المنتجات وتقوم بتسليمها.", world: "حول العالم", countries180: "180 دولة", lifetime: "بلا انتهاء", days: "يوم", gb: "GB", mb: "MB",
+    currencyLabel: "العملة", countrySearch: "دولة أو منطقة...", regionsGroup: "مناطق وباقات متعددة الدول", countriesGroup: "الدول", coversLabel: "{count} دولة", multiHint: "تظهر الباقات التي تغطي كل الدول المختارة.", tripDays: "مدة الرحلة", dataNeeded: "حجم البيانات المطلوب", maxPrice: "الميزانية", noLimit: "بلا حد", extrasLabel: "مكالمات وSMS", extrasAny: "كل الباقات", extrasData: "بيانات فقط", extrasVoice: "مع دقائق وSMS", minutesShort: "دقيقة",
   },
   tr: {
-    metaTitle: "Esim.free — seyahatiniz için en ucuz eSIM", metaDescription: "Şeffaf fiyatlı ve dünya çapında kapsamalı seyahat eSIM paketlerini doğrudan Esim.free’dan satın alın.",
+    metaTitle: "Esim.free - seyahatiniz için en ucuz eSIM", metaDescription: "Şeffaf fiyatlı ve dünya çapında kapsamalı seyahat eSIM paketlerini doğrudan Esim.free’dan satın alın.",
     navPlans: "Paketler", navHow: "Nasıl çalışır", themeToggle: "Açık ve koyu temayı değiştir", languageLabel: "Dil",
     heroEyebrow: "Doğrudan satış. Şeffaf fiyat.", heroLine1: "En ucuz", heroLine2: "eSIM. Anında.", heroLead: "Gideceğiniz yeri seçin. Esim.free uygun fiyatlı ön ödemeli eSIM paketlerini açık fiyatlarla doğrudan satar ve destekler.", findEsim: "eSIM bul",
     statPlans: "mevcut paket", statCountries: "popüler ülke", statMarkup: "harici ödemeye yönlendirme",
     catalogEyebrow: "Paket bulucu", catalogTitle: "Nereye gidiyorsunuz?", checked: "Fiyatlar 08.08.2026 tarihinde kontrol edildi", country: "Hedef", data: "İnternet", duration: "Geçerlilik", sort: "Önce göster",
-    anyData: "Herhangi bir miktar", from1: "1 GB ve üzeri", from3: "3 GB ve üzeri", from10: "10 GB ve üzeri", unlimited: "Sınırsız", anyDuration: "Herhangi", upToWeek: "7 güne kadar", upToMonth: "8–30 gün", overMonth: "30 günden fazla", cheapest: "En düşük fiyat", cheapestPerGb: "GB başına en düşük", moreData: "En çok internet",
+    anyData: "Herhangi bir miktar", from1: "1 GB ve üzeri", from3: "3 GB ve üzeri", from10: "10 GB ve üzeri", unlimited: "Sınırsız", anyDuration: "Herhangi", upToWeek: "7 güne kadar", upToMonth: "8-30 gün", overMonth: "30 günden fazla", cheapest: "En düşük fiyat", cheapestPerGb: "GB başına en düşük", moreData: "En çok internet",
     offers: "{count} teklif", providerPurchase: "Satış ve destek Esim.free tarafından", dataLabel: "İnternet", durationLabel: "Geçerlilik", best: "En düşük fiyat", choose: "Seç",
     emptyTitle: "Bu filtrelere uygun paket yok.", emptyText: "İnternet miktarını veya süreyi değiştirin.", showMore: "Daha fazla göster", priceNote: "Kapsama yerel ağlara bağlıdır. Gösterilen fiyatı Esim.free tahsil eder; zorunlu vergiler ödeme sırasında görünür.",
     stepsEyebrow: "Üç kolay adım", stepsTitle: "Seçin. Kurun. Bağlanın.", compare: "Karşılaştırın", buy: "Satın alın", connect: "Bağlanın", compareText: "Hedefi ve internet miktarını seçin. En ucuz seçenekler üstte görünür.", buyText: "Esim.free’a güvenle ödeme yapın. Paketinizi teslim eder ve destekleriz.", connectText: "QR kodunu tarayın ve e-postadaki talimatları izleyin.",
@@ -241,14 +263,15 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Esim.free nasıl para kazanıyor?", answer: "Bağlantıyı toptan tedarikçilerden alır ve gösterilen fiyata şeffaf bir perakende marjı ekleriz. Satış, teslimat ve destek Esim.free tarafından sağlanır." },
     ],
     footerTagline: "Uygun fiyatlı bağlantıya en kısa yol.", help: "Yardım", legal: "Ürünler Esim.free tarafından satılır ve teslim edilir.", world: "Dünya çapında", countries180: "180 ülke", lifetime: "Süresiz", days: "gün", gb: "GB", mb: "MB",
+    currencyLabel: "Para birimi", countrySearch: "Ülke veya bölge...", regionsGroup: "Bölgeler ve çok ülkeli", countriesGroup: "Ülkeler", coversLabel: "{count} ülke", multiHint: "Seçilen tüm ülkeleri kapsayan paketler gösteriliyor.", tripDays: "Seyahat süresi", dataNeeded: "Gereken internet", maxPrice: "Bütçe", noLimit: "sınırsız", extrasLabel: "Arama ve SMS", extrasAny: "Tüm paketler", extrasData: "Yalnızca internet", extrasVoice: "Dakika ve SMS ile", minutesShort: "dk",
   },
   zh: {
-    metaTitle: "Esim.free — 找到旅行中最便宜的 eSIM", metaDescription: "直接从 Esim.free 购买价格透明、覆盖全球的旅行 eSIM 套餐。",
+    metaTitle: "Esim.free - 找到旅行中最便宜的 eSIM", metaDescription: "直接从 Esim.free 购买价格透明、覆盖全球的旅行 eSIM 套餐。",
     navPlans: "套餐", navHow: "使用方法", themeToggle: "切换浅色和深色主题", languageLabel: "语言",
     heroEyebrow: "直接销售。价格透明。", heroLine1: "最便宜的", heroLine2: "eSIM，即刻找到。", heroLead: "选择目的地。Esim.free 以透明价格直接销售实惠的预付费 eSIM 套餐并提供支持。", findEsim: "查找 eSIM",
     statPlans: "种套餐可选", statCountries: "个热门目的地", statMarkup: "跳转至外部付款",
     catalogEyebrow: "套餐查找", catalogTitle: "您要去哪里？", checked: "价格核对于 2026/08/08", country: "目的地", data: "流量", duration: "有效期", sort: "优先显示",
-    anyData: "不限流量", from1: "1 GB 起", from3: "3 GB 起", from10: "10 GB 起", unlimited: "无限流量", anyDuration: "不限", upToWeek: "最多 7 天", upToMonth: "8–30 天", overMonth: "超过 30 天", cheapest: "价格最低", cheapestPerGb: "每 GB 最低", moreData: "流量最多",
+    anyData: "不限流量", from1: "1 GB 起", from3: "3 GB 起", from10: "10 GB 起", unlimited: "无限流量", anyDuration: "不限", upToWeek: "最多 7 天", upToMonth: "8-30 天", overMonth: "超过 30 天", cheapest: "价格最低", cheapestPerGb: "每 GB 最低", moreData: "流量最多",
     offers: "{count} 个套餐", providerPurchase: "由 Esim.free 销售并提供支持", dataLabel: "流量", durationLabel: "有效期", best: "价格最低", choose: "选择",
     emptyTitle: "没有符合筛选条件的套餐。", emptyText: "请调整流量或有效期。", showMore: "显示更多", priceNote: "覆盖范围取决于当地网络。Esim.free 收取所示套餐价格；法定税费会在结账时显示。",
     stepsEyebrow: "三个简单步骤", stepsTitle: "选择。安装。联网。", compare: "比较", buy: "购买", connect: "连接", compareText: "选择目的地和流量，最便宜的选项会排在前面。", buyText: "安全支付给 Esim.free。我们负责交付套餐并提供支持。", connectText: "扫描二维码并按照邮件中的说明操作。",
@@ -260,9 +283,10 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Esim.free 如何盈利？", answer: "我们从上游供应商批量采购连接服务，并在所示价格中加入透明的零售利润。销售、交付和支持均由 Esim.free 负责。" },
     ],
     footerTagline: "实惠上网的最短路径。", help: "帮助", legal: "产品由 Esim.free 销售并交付。", world: "全球", countries180: "180 个国家", lifetime: "永久有效", days: "天", gb: "GB", mb: "MB",
+    currencyLabel: "货币", countrySearch: "国家或地区...", regionsGroup: "区域及多国套餐", countriesGroup: "国家", coversLabel: "覆盖 {count} 个国家", multiHint: "正在显示覆盖所有所选国家的套餐。", tripDays: "行程天数", dataNeeded: "所需流量", maxPrice: "预算", noLimit: "不限", extrasLabel: "通话和短信", extrasAny: "全部套餐", extrasData: "仅流量", extrasVoice: "含通话和短信", minutesShort: "分钟",
   },
   ja: {
-    metaTitle: "Esim.free — 旅行先で最安のeSIMを検索", metaDescription: "透明な価格の旅行用eSIMをEsim.freeから直接購入できます。",
+    metaTitle: "Esim.free - 旅行先で最安のeSIMを検索", metaDescription: "透明な価格の旅行用eSIMをEsim.freeから直接購入できます。",
     navPlans: "プラン", navHow: "使い方", themeToggle: "ライト・ダークテーマを切り替える", languageLabel: "言語",
     heroEyebrow: "直接販売。透明な価格。", heroLine1: "最安のeSIMを", heroLine2: "すぐに。", heroLead: "渡航先を選ぶだけ。Esim.freeが手頃なプリペイドeSIMを明確な価格で直接販売・サポートします。", findEsim: "eSIMを探す",
     statPlans: "以上のプラン", statCountries: "の人気渡航先", statMarkup: "外部決済への移動",
@@ -279,9 +303,10 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Esim.freeの収益源は？", answer: "上流サプライヤーから通信を卸仕入れし、表示価格に透明な小売マージンを含めています。販売、納品、サポートはEsim.freeが行います。" },
     ],
     footerTagline: "手頃な通信への最短ルート。", help: "ヘルプ", legal: "商品はEsim.freeが販売・提供します。", world: "世界中", countries180: "180か国", lifetime: "期限なし", days: "日", gb: "GB", mb: "MB",
+    currencyLabel: "通貨", countrySearch: "国名または地域...", regionsGroup: "地域・複数国プラン", countriesGroup: "国", coversLabel: "{count}か国対応", multiHint: "選択したすべての国をカバーするプランを表示しています。", tripDays: "旅行日数", dataNeeded: "必要なデータ量", maxPrice: "予算", noLimit: "上限なし", extrasLabel: "通話・SMS", extrasAny: "すべてのプラン", extrasData: "データのみ", extrasVoice: "通話・SMS付き", minutesShort: "分",
   },
   ko: {
-    metaTitle: "Esim.free — 여행용 최저가 eSIM 찾기", metaDescription: "투명한 가격의 여행용 eSIM을 Esim.free에서 직접 구매하세요.",
+    metaTitle: "Esim.free - 여행용 최저가 eSIM 찾기", metaDescription: "투명한 가격의 여행용 eSIM을 Esim.free에서 직접 구매하세요.",
     navPlans: "요금제", navHow: "이용 방법", themeToggle: "라이트·다크 테마 전환", languageLabel: "언어",
     heroEyebrow: "직접 판매. 투명한 가격.", heroLine1: "가장 저렴한", heroLine2: "eSIM을 바로.", heroLead: "여행지를 선택하세요. Esim.free가 합리적인 선불 eSIM을 명확한 가격으로 직접 판매하고 지원합니다.", findEsim: "eSIM 찾기",
     statPlans: "개 이상의 요금제", statCountries: "개 인기 여행지", statMarkup: "외부 결제로 이동",
@@ -298,14 +323,15 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Esim.free는 어떻게 수익을 내나요?", answer: "상위 공급업체에서 연결 서비스를 도매로 구매하고 표시 가격에 투명한 소매 마진을 포함합니다. 판매, 배송 및 지원은 Esim.free가 담당합니다." },
     ],
     footerTagline: "합리적인 연결로 가는 가장 짧은 길.", help: "도움말", legal: "상품은 Esim.free가 판매하고 제공합니다.", world: "전 세계", countries180: "180개국", lifetime: "만료 없음", days: "일", gb: "GB", mb: "MB",
+    currencyLabel: "통화", countrySearch: "국가 또는 지역...", regionsGroup: "지역 및 다국가 요금제", countriesGroup: "국가", coversLabel: "{count}개국 지원", multiHint: "선택한 모든 국가를 지원하는 요금제를 표시합니다.", tripDays: "여행 기간", dataNeeded: "필요한 데이터", maxPrice: "예산", noLimit: "제한 없음", extrasLabel: "통화 및 SMS", extrasAny: "전체 요금제", extrasData: "데이터 전용", extrasVoice: "통화·SMS 포함", minutesShort: "분",
   },
   hi: {
-    metaTitle: "Esim.free — यात्रा के लिए सबसे सस्ती eSIM", metaDescription: "पारदर्शी कीमत पर यात्रा eSIM सीधे Esim.free से खरीदें।",
+    metaTitle: "Esim.free - यात्रा के लिए सबसे सस्ती eSIM", metaDescription: "पारदर्शी कीमत पर यात्रा eSIM सीधे Esim.free से खरीदें।",
     navPlans: "प्लान", navHow: "यह कैसे काम करता है", themeToggle: "लाइट और डार्क थीम बदलें", languageLabel: "भाषा",
     heroEyebrow: "सीधी बिक्री। पारदर्शी कीमत।", heroLine1: "सबसे सस्ती", heroLine2: "eSIM, तुरंत।", heroLead: "गंतव्य चुनें। Esim.free किफ़ायती प्रीपेड eSIM प्लान साफ़ कीमतों के साथ सीधे बेचता और सपोर्ट करता है।", findEsim: "eSIM खोजें",
     statPlans: "प्लान उपलब्ध", statCountries: "लोकप्रिय गंतव्य", statMarkup: "बाहरी भुगतान रीडायरेक्ट",
     catalogEyebrow: "प्लान खोज", catalogTitle: "आप कहाँ जा रहे हैं?", checked: "कीमतें 08/08/2026 को जाँची गईं", country: "गंतव्य", data: "डेटा", duration: "वैधता", sort: "पहले दिखाएँ",
-    anyData: "कोई भी डेटा", from1: "1 GB से", from3: "3 GB से", from10: "10 GB से", unlimited: "अनलिमिटेड", anyDuration: "कोई भी", upToWeek: "7 दिन तक", upToMonth: "8–30 दिन", overMonth: "30 दिन से अधिक", cheapest: "सबसे कम कीमत", cheapestPerGb: "प्रति GB सबसे कम", moreData: "सबसे अधिक डेटा",
+    anyData: "कोई भी डेटा", from1: "1 GB से", from3: "3 GB से", from10: "10 GB से", unlimited: "अनलिमिटेड", anyDuration: "कोई भी", upToWeek: "7 दिन तक", upToMonth: "8-30 दिन", overMonth: "30 दिन से अधिक", cheapest: "सबसे कम कीमत", cheapestPerGb: "प्रति GB सबसे कम", moreData: "सबसे अधिक डेटा",
     offers: "{count} विकल्प", providerPurchase: "Esim.free द्वारा बिक्री और सहायता", dataLabel: "डेटा", durationLabel: "वैधता", best: "सबसे कम कीमत", choose: "चुनें",
     emptyTitle: "इन फ़िल्टर से कोई प्लान नहीं मिला।", emptyText: "डेटा या वैधता बदलकर देखें।", showMore: "और दिखाएँ", priceNote: "कवरेज स्थानीय नेटवर्क पर निर्भर करता है। दिखाया गया मूल्य Esim.free लेता है; अनिवार्य कर चेकआउट पर दिखते हैं।",
     stepsEyebrow: "तीन आसान चरण", stepsTitle: "चुनें। इंस्टॉल करें। जुड़ें।", compare: "तुलना करें", buy: "खरीदें", connect: "जुड़ें", compareText: "गंतव्य और डेटा चुनें। सबसे सस्ते विकल्प पहले दिखेंगे।", buyText: "Esim.free को सुरक्षित भुगतान करें। हम प्लान डिलीवर करते हैं और सहायता देते हैं।", connectText: "QR कोड स्कैन करें और ईमेल के निर्देशों का पालन करें।",
@@ -317,6 +343,7 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Esim.free पैसे कैसे कमाता है?", answer: "हम अपस्ट्रीम सप्लायर से कनेक्टिविटी थोक में खरीदते हैं और दिखाए गए मूल्य में पारदर्शी खुदरा मार्जिन शामिल करते हैं। बिक्री, डिलीवरी और सहायता Esim.free संभालता है।" },
     ],
     footerTagline: "किफ़ायती कनेक्टिविटी का सबसे छोटा रास्ता।", help: "मदद", legal: "उत्पाद Esim.free द्वारा बेचे और डिलीवर किए जाते हैं।", world: "दुनिया भर में", countries180: "180 देश", lifetime: "कोई समाप्ति नहीं", days: "दिन", gb: "GB", mb: "MB",
+    currencyLabel: "मुद्रा", countrySearch: "देश या क्षेत्र...", regionsGroup: "क्षेत्र और बहु-देशीय", countriesGroup: "देश", coversLabel: "{count} देश", multiHint: "चुने गए सभी देशों को कवर करने वाले प्लान दिख रहे हैं।", tripDays: "यात्रा की अवधि", dataNeeded: "आवश्यक डेटा", maxPrice: "बजट", noLimit: "कोई सीमा नहीं", extrasLabel: "कॉल और SMS", extrasAny: "सभी प्लान", extrasData: "केवल डेटा", extrasVoice: "मिनट और SMS सहित", minutesShort: "मिनट",
   },
 };
 

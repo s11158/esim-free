@@ -378,3 +378,28 @@ footer { border-top: 1px solid var(--line); background: var(--surface); }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; }
 }
+
+/* Finder: multi-country picker, sliders, currency */
+.finder-panel { grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr 1fr; align-items: stretch; }
+.picker-field { position: relative; }
+.picker-box { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; min-height: 30px; }
+.picker-box input { flex: 1; min-width: 110px; border: 0; outline: 0; background: transparent; color: var(--text); font-size: 15px; font-weight: 650; }
+.picker-box input::placeholder { color: var(--muted-soft); font-weight: 500; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-soft); color: var(--text); font-size: 13px; font-weight: 650; cursor: pointer; }
+.chip b { font-size: 15px; line-height: 1; }
+.chip i { font-style: normal; color: var(--muted); font-weight: 700; }
+.chip:hover { border-color: color-mix(in srgb, var(--mint) 45%, var(--line)); }
+.picker-drop { position: absolute; z-index: 30; top: calc(100% + 6px); left: 0; right: 0; max-height: 330px; overflow-y: auto; padding: 8px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: var(--shadow-hover); }
+.picker-group { margin: 8px 8px 4px; color: var(--muted-soft); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; }
+.picker-item { display: grid; grid-template-columns: 26px 1fr auto; gap: 9px; align-items: center; width: 100%; padding: 8px 9px; border: 0; border-radius: 9px; background: transparent; color: var(--text); font-size: 14px; font-weight: 600; text-align: start; cursor: pointer; }
+.picker-item b { font-size: 17px; line-height: 1; }
+.picker-item em { font-style: normal; color: var(--muted-soft); font-size: 11px; }
+.picker-item:hover { background: var(--surface-soft); }
+.picker-item.active { background: color-mix(in srgb, var(--mint) 16%, var(--surface)); }
+.picker-hint { margin: 8px 0 0; color: var(--mint-deep); font-size: 11px; font-weight: 650; }
+.slider-field strong { color: var(--text); font-size: 13px; letter-spacing: 0; text-transform: none; }
+.slider-field input[type="range"] { width: 100%; margin-top: 8px; accent-color: var(--mint-deep); cursor: pointer; }
+.coverage-note { display: block; margin-top: 3px; font-style: normal; color: var(--muted-soft); font-size: 10px; }
+.currency-switcher select { width: 64px; }
+@media (max-width: 1120px) { .finder-panel { grid-template-columns: repeat(3, 1fr); } .picker-field { grid-column: 1 / -1; } }
+@media (max-width: 640px) { .finder-panel { grid-template-columns: 1fr; } }
