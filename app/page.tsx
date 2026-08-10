@@ -7,13 +7,11 @@ import { detectLanguage, LANGUAGES, Language, MESSAGES, Messages } from "./i18n"
 type Plan = {
   id: string;
   country: string;
-  provider: string;
-  name: string;
   gb: number;
   days: number;
   price: number;
   pricePerGb: number;
-  fiveG?: boolean;
+  unlimited?: boolean;
 };
 
 type Country = {
@@ -42,79 +40,49 @@ const COUNTRIES: Record<string, Country> = {
   global: { code: "001", flag: "🌍" },
 };
 
-const PROVIDER_INFO: Record<string, { accent: string }> = {
-  Airalo: { accent: "#ff6b5f" },
-  Yesim: { accent: "#a7f45c" },
-  Maya: { accent: "#7ec8ff" },
-  Saily: { accent: "#7e7bff" },
-  "Stellar eSim": { accent: "#ffe45e" },
-  "Giga.Tel": { accent: "#fb62c7" },
-  Superalink: { accent: "#00e6bc" },
-  eSIM4Travel: { accent: "#f3a34b" },
-  eSIMCard: { accent: "#4be0ff" },
-  BNESIM: { accent: "#e2ff63" },
-  Roamify: { accent: "#ff8f70" },
-  "Sim Local": { accent: "#bd9cff" },
-};
-
 const CURATED_PLANS: Plan[] = [
-  { id: "maya-3", country: "global", provider: "Maya", name: "Unlimited · 180 стран", gb: 999, days: 3, price: 9.99, pricePerGb: 0 },
-  { id: "maya-7", country: "global", provider: "Maya", name: "Unlimited · 180 стран", gb: 999, days: 7, price: 19.99, pricePerGb: 0 },
-  { id: "maya-14", country: "global", provider: "Maya", name: "Unlimited · 180 стран", gb: 999, days: 14, price: 27.99, pricePerGb: 0 },
-  { id: "maya-30", country: "global", provider: "Maya", name: "Unlimited · 180 стран", gb: 999, days: 30, price: 49.99, pricePerGb: 0 },
-  { id: "airalo-tr-7", country: "turkey", provider: "Airalo", name: "Unlimited · Turk Telekom", gb: 999, days: 7, price: 24.5, pricePerGb: 0 },
-  { id: "airalo-th-7", country: "thailand", provider: "Airalo", name: "Unlimited · dtac", gb: 999, days: 7, price: 21.5, pricePerGb: 0 },
-  { id: "airalo-th-30", country: "thailand", provider: "Airalo", name: "Unlimited · dtac", gb: 999, days: 30, price: 49, pricePerGb: 0 },
-  { id: "airalo-ae-3", country: "uae", provider: "Airalo", name: "Unlimited", gb: 999, days: 3, price: 12.5, pricePerGb: 0 },
-  { id: "airalo-ae-7", country: "uae", provider: "Airalo", name: "Unlimited", gb: 999, days: 7, price: 27.5, pricePerGb: 0 },
-  { id: "airalo-id-7", country: "indonesia", provider: "Airalo", name: "Unlimited", gb: 999, days: 7, price: 27, pricePerGb: 0 },
-  { id: "airalo-jp-7", country: "japan", provider: "Airalo", name: "Unlimited · SoftBank", gb: 999, days: 7, price: 27, pricePerGb: 0 },
-  { id: "airalo-ge-3", country: "georgia", provider: "Airalo", name: "3 ГБ · Cellfie", gb: 3, days: 7, price: 11, pricePerGb: 3.67 },
-  { id: "airalo-ge-5", country: "georgia", provider: "Airalo", name: "5 ГБ · Cellfie", gb: 5, days: 30, price: 17, pricePerGb: 3.4 },
-  { id: "airalo-eg-3", country: "egypt", provider: "Airalo", name: "Unlimited", gb: 999, days: 3, price: 19.5, pricePerGb: 0 },
-  { id: "airalo-eg-7", country: "egypt", provider: "Airalo", name: "Unlimited", gb: 999, days: 7, price: 32, pricePerGb: 0 },
-  { id: "airalo-it", country: "italy", provider: "Airalo", name: "Unlimited", gb: 999, days: 7, price: 23, pricePerGb: 0 },
-  { id: "airalo-es", country: "spain", provider: "Airalo", name: "Unlimited", gb: 999, days: 7, price: 23.5, pricePerGb: 0 },
-  { id: "airalo-fr", country: "france", provider: "Airalo", name: "5 ГБ", gb: 5, days: 15, price: 10, pricePerGb: 2 },
-  { id: "airalo-de", country: "germany", provider: "Airalo", name: "Unlimited", gb: 999, days: 7, price: 24, pricePerGb: 0 },
-  { id: "airalo-uk", country: "uk", provider: "Airalo", name: "Unlimited", gb: 999, days: 7, price: 27, pricePerGb: 0 },
-  { id: "airalo-us", country: "usa", provider: "Airalo", name: "Unlimited", gb: 999, days: 7, price: 25, pricePerGb: 0 },
-  { id: "airalo-vn", country: "vietnam", provider: "Airalo", name: "Unlimited", gb: 999, days: 7, price: 27, pricePerGb: 0 },
-  { id: "airalo-my", country: "malaysia", provider: "Airalo", name: "Unlimited", gb: 999, days: 7, price: 27, pricePerGb: 0 },
-  { id: "airalo-sg", country: "singapore", provider: "Airalo", name: "Unlimited", gb: 999, days: 7, price: 27, pricePerGb: 0 },
-  { id: "airalo-mx", country: "mexico", provider: "Airalo", name: "Unlimited", gb: 999, days: 7, price: 23.5, pricePerGb: 0 },
-  { id: "saily-tr", country: "turkey", provider: "Saily", name: "20 ГБ", gb: 20, days: 30, price: 22.99, pricePerGb: 1.15 },
-  { id: "saily-th", country: "thailand", provider: "Saily", name: "20 ГБ", gb: 20, days: 30, price: 19.99, pricePerGb: 1 },
-  { id: "saily-ae", country: "uae", provider: "Saily", name: "10 ГБ", gb: 10, days: 30, price: 19.99, pricePerGb: 2 },
-  { id: "saily-id", country: "indonesia", provider: "Saily", name: "10 ГБ", gb: 10, days: 30, price: 21.99, pricePerGb: 2.2 },
-  { id: "saily-jp", country: "japan", provider: "Saily", name: "20 ГБ", gb: 20, days: 30, price: 24.99, pricePerGb: 1.25 },
-  { id: "saily-ge", country: "georgia", provider: "Saily", name: "10 ГБ", gb: 10, days: 30, price: 30.99, pricePerGb: 3.1 },
-  { id: "saily-eg", country: "egypt", provider: "Saily", name: "10 ГБ", gb: 10, days: 30, price: 33.99, pricePerGb: 3.4 },
-  { id: "saily-it", country: "italy", provider: "Saily", name: "20 ГБ", gb: 20, days: 30, price: 28.99, pricePerGb: 1.45 },
-  { id: "saily-es", country: "spain", provider: "Saily", name: "20 ГБ", gb: 20, days: 30, price: 22.99, pricePerGb: 1.15 },
-  { id: "saily-fr", country: "france", provider: "Saily", name: "20 ГБ", gb: 20, days: 30, price: 22.99, pricePerGb: 1.15 },
-  { id: "saily-de", country: "germany", provider: "Saily", name: "20 ГБ", gb: 20, days: 30, price: 22.99, pricePerGb: 1.15 },
-  { id: "saily-uk", country: "uk", provider: "Saily", name: "20 ГБ", gb: 20, days: 30, price: 30.99, pricePerGb: 1.55 },
-  { id: "saily-us", country: "usa", provider: "Saily", name: "20 ГБ", gb: 20, days: 30, price: 36.99, pricePerGb: 1.85 },
-  { id: "saily-vn", country: "vietnam", provider: "Saily", name: "20 ГБ", gb: 20, days: 30, price: 28.99, pricePerGb: 1.45 },
-  { id: "saily-my", country: "malaysia", provider: "Saily", name: "20 ГБ", gb: 20, days: 30, price: 35.99, pricePerGb: 1.8 },
-  { id: "saily-sg", country: "singapore", provider: "Saily", name: "20 ГБ", gb: 20, days: 30, price: 22.99, pricePerGb: 1.15 },
-  { id: "saily-mx", country: "mexico", provider: "Saily", name: "20 ГБ", gb: 20, days: 30, price: 37.99, pricePerGb: 1.9 },
-];
-
-const PARTNER_NAMES = [
-  "Airalo",
-  "Yesim",
-  "Maya Mobile",
-  "Stellar",
-  "Giga.Tel",
-  "Superalink",
-  "eSIM4Travel",
-  "eSIMCard",
-  "Saily",
-  "BNESIM",
-  "Roamify",
-  "Sim Local",
+  { id: "plan-001", country: "global", gb: 999, days: 3, price: 9.99, pricePerGb: 0, unlimited: true },
+  { id: "plan-002", country: "global", gb: 999, days: 7, price: 19.99, pricePerGb: 0, unlimited: true },
+  { id: "plan-003", country: "global", gb: 999, days: 14, price: 27.99, pricePerGb: 0, unlimited: true },
+  { id: "plan-004", country: "global", gb: 999, days: 30, price: 49.99, pricePerGb: 0, unlimited: true },
+  { id: "plan-005", country: "turkey", gb: 999, days: 7, price: 24.5, pricePerGb: 0, unlimited: true },
+  { id: "plan-006", country: "thailand", gb: 999, days: 7, price: 21.5, pricePerGb: 0, unlimited: true },
+  { id: "plan-007", country: "thailand", gb: 999, days: 30, price: 49, pricePerGb: 0, unlimited: true },
+  { id: "plan-008", country: "uae", gb: 999, days: 3, price: 12.5, pricePerGb: 0, unlimited: true },
+  { id: "plan-009", country: "uae", gb: 999, days: 7, price: 27.5, pricePerGb: 0, unlimited: true },
+  { id: "plan-010", country: "indonesia", gb: 999, days: 7, price: 27, pricePerGb: 0, unlimited: true },
+  { id: "plan-011", country: "japan", gb: 999, days: 7, price: 27, pricePerGb: 0, unlimited: true },
+  { id: "plan-012", country: "georgia", gb: 3, days: 7, price: 11, pricePerGb: 3.67 },
+  { id: "plan-013", country: "georgia", gb: 5, days: 30, price: 17, pricePerGb: 3.4 },
+  { id: "plan-014", country: "egypt", gb: 999, days: 3, price: 19.5, pricePerGb: 0, unlimited: true },
+  { id: "plan-015", country: "egypt", gb: 999, days: 7, price: 32, pricePerGb: 0, unlimited: true },
+  { id: "plan-016", country: "italy", gb: 999, days: 7, price: 23, pricePerGb: 0, unlimited: true },
+  { id: "plan-017", country: "spain", gb: 999, days: 7, price: 23.5, pricePerGb: 0, unlimited: true },
+  { id: "plan-018", country: "france", gb: 5, days: 15, price: 10, pricePerGb: 2 },
+  { id: "plan-019", country: "germany", gb: 999, days: 7, price: 24, pricePerGb: 0, unlimited: true },
+  { id: "plan-020", country: "uk", gb: 999, days: 7, price: 27, pricePerGb: 0, unlimited: true },
+  { id: "plan-021", country: "usa", gb: 999, days: 7, price: 25, pricePerGb: 0, unlimited: true },
+  { id: "plan-022", country: "vietnam", gb: 999, days: 7, price: 27, pricePerGb: 0, unlimited: true },
+  { id: "plan-023", country: "malaysia", gb: 999, days: 7, price: 27, pricePerGb: 0, unlimited: true },
+  { id: "plan-024", country: "singapore", gb: 999, days: 7, price: 27, pricePerGb: 0, unlimited: true },
+  { id: "plan-025", country: "mexico", gb: 999, days: 7, price: 23.5, pricePerGb: 0, unlimited: true },
+  { id: "plan-026", country: "turkey", gb: 20, days: 30, price: 22.99, pricePerGb: 1.15 },
+  { id: "plan-027", country: "thailand", gb: 20, days: 30, price: 19.99, pricePerGb: 1 },
+  { id: "plan-028", country: "uae", gb: 10, days: 30, price: 19.99, pricePerGb: 2 },
+  { id: "plan-029", country: "indonesia", gb: 10, days: 30, price: 21.99, pricePerGb: 2.2 },
+  { id: "plan-030", country: "japan", gb: 20, days: 30, price: 24.99, pricePerGb: 1.25 },
+  { id: "plan-031", country: "georgia", gb: 10, days: 30, price: 30.99, pricePerGb: 3.1 },
+  { id: "plan-032", country: "egypt", gb: 10, days: 30, price: 33.99, pricePerGb: 3.4 },
+  { id: "plan-033", country: "italy", gb: 20, days: 30, price: 28.99, pricePerGb: 1.45 },
+  { id: "plan-034", country: "spain", gb: 20, days: 30, price: 22.99, pricePerGb: 1.15 },
+  { id: "plan-035", country: "france", gb: 20, days: 30, price: 22.99, pricePerGb: 1.15 },
+  { id: "plan-036", country: "germany", gb: 20, days: 30, price: 22.99, pricePerGb: 1.15 },
+  { id: "plan-037", country: "uk", gb: 20, days: 30, price: 30.99, pricePerGb: 1.55 },
+  { id: "plan-038", country: "usa", gb: 20, days: 30, price: 36.99, pricePerGb: 1.85 },
+  { id: "plan-039", country: "vietnam", gb: 20, days: 30, price: 28.99, pricePerGb: 1.45 },
+  { id: "plan-040", country: "malaysia", gb: 20, days: 30, price: 35.99, pricePerGb: 1.8 },
+  { id: "plan-041", country: "singapore", gb: 20, days: 30, price: 22.99, pricePerGb: 1.15 },
+  { id: "plan-042", country: "mexico", gb: 20, days: 30, price: 37.99, pricePerGb: 1.9 },
 ];
 
 function splitCsvLine(line: string) {
@@ -143,35 +111,24 @@ function splitCsvLine(line: string) {
   return cells;
 }
 
-function cleanText(value: string) {
-  return value
-    .replaceAll("&amp;", "&")
-    .replaceAll("&quot;", '"')
-    .replaceAll("&#39;", "'")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
 function parseMarketCsv(csv: string): Plan[] {
   return csv
     .trim()
     .split(/\r?\n/)
     .slice(1)
     .map((line, index) => {
-      const [country, provider, name, gb, days, price, pricePerGb, , fiveG] = splitCsvLine(line);
+      const [country, gb, days, price, pricePerGb, unlimited] = splitCsvLine(line);
       return {
         id: `market-${index}`,
         country,
-        provider: cleanText(provider),
-        name: cleanText(name),
         gb: Number(gb),
         days: Number(days),
         price: Number(price),
         pricePerGb: Number(pricePerGb),
-        fiveG: fiveG === "yes",
+        unlimited: unlimited === "yes",
       };
     })
-    .filter((plan) => COUNTRIES[plan.country] && PROVIDER_INFO[plan.provider] && plan.price > 0 && plan.gb > 0);
+    .filter((plan) => COUNTRIES[plan.country] && plan.price > 0 && plan.gb > 0);
 }
 
 function countryLabel(key: string, language: Language, t: Messages) {
@@ -184,16 +141,8 @@ function countryLabel(key: string, language: Language, t: Messages) {
   }
 }
 
-function displayPlanName(plan: Plan, t: Messages) {
-  if (plan.provider === "Maya") return `${t.unlimited} · ${t.countries180}`;
-  return cleanText(plan.name)
-    .replace(/^Unlimited/i, t.unlimited)
-    .replace(/Безлимит/gi, t.unlimited)
-    .replace(/(\d+(?:\.\d+)?)\s*ГБ/g, `$1 ${t.gb}`);
-}
-
 function formatData(plan: Plan, t: Messages) {
-  if (plan.gb >= 999 || /unlimited|безлимит/i.test(plan.name)) return t.unlimited;
+  if (plan.unlimited || plan.gb >= 999) return t.unlimited;
   if (plan.gb < 1) return `${Math.round(plan.gb * 1000)} ${t.mb}`;
   return `${Number.isInteger(plan.gb) ? plan.gb : plan.gb.toFixed(1)} ${t.gb}`;
 }
@@ -239,7 +188,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    fetch("/data/esimdb-market.csv")
+    fetch("/data/catalog.csv")
       .then((response) => {
         if (!response.ok) throw new Error("Catalog unavailable");
         return response.text();
@@ -256,7 +205,7 @@ export default function Home() {
         if (dataFilter === "1plus") return plan.gb >= 1;
         if (dataFilter === "3plus") return plan.gb >= 3;
         if (dataFilter === "10plus") return plan.gb >= 10;
-        return plan.gb >= 999 || /unlimited|безлимит/i.test(plan.name);
+        return Boolean(plan.unlimited || plan.gb >= 999);
       })
       .filter((plan) => {
         if (durationFilter === "week") return plan.days > 0 && plan.days <= 7;
@@ -405,7 +354,6 @@ export default function Home() {
           {results.length > 0 ? (
             <div className="plan-list">
               {results.slice(0, visible).map((plan, index) => {
-                const provider = PROVIDER_INFO[plan.provider];
                 const checkoutParams = new URLSearchParams({
                   plan: plan.id,
                   destination: currentCountryLabel,
@@ -415,18 +363,16 @@ export default function Home() {
                 });
                 return (
                   <article className="plan" key={plan.id}>
-                    <div className="rank" aria-label={`#${index + 1}`}>{String(index + 1).padStart(2, "0")}</div>
-                    <div className="provider-cell">
-                      <i style={{ background: provider.accent }} aria-hidden="true" />
+                    <div className="country-cell">
+                      <b className="plan-flag" aria-hidden="true">{country.flag}</b>
                       <div>
-                        <strong>esim.free</strong>
-                        <span>{displayPlanName(plan, t)}</span>
+                        <span>{t.country}</span>
+                        <strong>{currentCountryLabel}</strong>
                       </div>
                     </div>
                     <div className="plan-facts">
                       <div><span>{t.dataLabel}</span><strong>{formatData(plan, t)}</strong></div>
                       <div><span>{t.durationLabel}</span><strong>{formatDays(plan.days, t)}</strong></div>
-                      <div><span>{t.networkLabel}</span><strong>{plan.fiveG ? "5G" : "4G / LTE"}</strong></div>
                     </div>
                     <div className="plan-price">
                       {index === 0 && <span className="best">{t.best}</span>}
@@ -467,15 +413,6 @@ export default function Home() {
           <article><span>01</span><h3>{t.compare}</h3><p>{t.compareText}</p></article>
           <article><span>02</span><h3>{t.buy}</h3><p>{t.buyText}</p></article>
           <article><span>03</span><h3>{t.connect}</h3><p>{t.connectText}</p></article>
-        </div>
-      </section>
-
-      <section className="partners">
-        <div className="shell">
-          <p>{t.partners}</p>
-          <div className="partner-list" aria-label="eSIM network supply partners">
-            {PARTNER_NAMES.map((name) => <span key={name}>{name}</span>)}
-          </div>
         </div>
       </section>
 

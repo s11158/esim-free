@@ -36,11 +36,9 @@ export default function PricingPage() {
             <strong>${plan.price.toFixed(2)}</strong>
             <span>one-time payment</span>
             <ul>
-              <li>{plan.data}</li>
-              <li>{plan.duration} validity</li>
-              <li>{plan.coverage}</li>
-              <li>QR delivery by email</li>
-              <li>Activation guide and support</li>
+              <li>Country: {plan.coverage}</li>
+              <li>Validity: {plan.duration}</li>
+              <li>Data: {plan.data}</li>
             </ul>
             <a href={checkoutHref(plan)}>Buy from esim.free</a>
           </article>
