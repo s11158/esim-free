@@ -10,16 +10,17 @@
     "PAYMENT_WALLET_ADDRESS": "TLwjVQ39DfxSsTRgnuvqBGRuRipZopZogs",
     "PAYMENT_WINDOW_MINUTES": "60",
     "TRONGRID_BASE_URL": "https://api.trongrid.io",
-    "USDT_TRC20_CONTRACT": "TXLAQ63Xg1NAzckPwKHvzw7CSEmLMEqcdj"
+    "USDT_TRC20_CONTRACT": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+    "ESIMERGE_BASE_URL": "https://portal.esimerge.com/api/public/v1"
   },
   "secrets": {
-    "required": ["ORDER_HMAC_SECRET"]
+    "required": ["ORDER_HMAC_SECRET", "ESIMERGE_KEY"]
   },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "esim-free-orders",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "5a89e15e-1ea5-4488-9385-35673988a4b4",
       "migrations_dir": "migrations"
     }
   ],

@@ -63,6 +63,14 @@ type PaymentOrder = {
   paidAt: string | null;
   transactionId: string | null;
   email: string;
+  esim?: {
+    iccid: string | null;
+    qr_code: string | null;
+    smdp_address: string | null;
+    activation_code: string | null;
+    ios_install_url: string | null;
+    android_install_url: string | null;
+  } | null;
 };
 
 type StoredOrder = {
@@ -88,7 +96,7 @@ const COPY: Record<Language, CheckoutCopy> = {
 
 const PAYMENT_COPY: Record<Language, PaymentCopy> = {
   en: { email: "Delivery email", emailPlaceholder: "you@example.com", accept: "I accept the Terms and Refund Policy", create: "Create secure USDT invoice", creating: "Creating invoice…", wallet: "TRC-20 address", exactAmount: "Send exactly", expires: "Time remaining", copy: "Copy", copied: "Copied", waiting: "Waiting for a confirmed TRON transaction…", paid: "Payment confirmed", paidText: "We matched the transaction to this order. Delivery is being prepared for your email.", expired: "Invoice expired", expiredText: "Do not transfer to this amount. Create a new invoice.", retry: "Create a new invoice", networkWarning: "The unique digits are the order code. Send the amount exactly.", unavailable: "Automatic checkout is being connected. Request a verified payment link instead." },
-  ru: { email: "Email для получения eSIM", emailPlaceholder: "you@example.com", accept: "Я принимаю Условия и Политику возвратов", create: "Создать защищённый счёт USDT", creating: "Создаём счёт…", wallet: "Адрес TRC-20", exactAmount: "Отправьте ровно", expires: "Осталось времени", copy: "Копировать", copied: "Скопировано", waiting: "Ждём подтверждённую транзакцию в сети TRON…", paid: "Оплата подтверждена", paidText: "Транзакция сопоставлена с заказом. Готовим выдачу eSIM на ваш email.", expired: "Счёт истёк", expiredText: "Не переводите эту сумму. Создайте новый счёт.", retry: "Создать новый счёт", networkWarning: "Уникальные цифры — код заказа. Отправьте сумму абсолютно точно.", unavailable: "Автоматическая оплата ещё подключается. Запросите проверенную ссылку на оплату." },
+  ru: { email: "Email для получения eSIM", emailPlaceholder: "you@example.com", accept: "Я принимаю Условия и Политику возвратов", create: "Создать защищённый счёт USDT", creating: "Создаём счёт…", wallet: "Адрес TRC-20", exactAmount: "Отправьте ровно", expires: "Осталось времени", copy: "Копировать", copied: "Скопировано", waiting: "Ждём подтверждённую транзакцию в сети TRON…", paid: "Оплата подтверждена", paidText: "Транзакция сопоставлена с заказом. Готовим выдачу eSIM на ваш email.", expired: "Счёт истёк", expiredText: "Не переводите эту сумму. Создайте новый счёт.", retry: "Создать новый счёт", networkWarning: "Уникальные цифры - код заказа. Отправьте сумму абсолютно точно.", unavailable: "Автоматическая оплата ещё подключается. Запросите проверенную ссылку на оплату." },
   es: { email: "Email de entrega", emailPlaceholder: "tu@ejemplo.com", accept: "Acepto los Términos y la Política de reembolso", create: "Crear factura USDT segura", creating: "Creando factura…", wallet: "Dirección TRC-20", exactAmount: "Envía exactamente", expires: "Tiempo restante", copy: "Copiar", copied: "Copiado", waiting: "Esperando una transacción TRON confirmada…", paid: "Pago confirmado", paidText: "La transacción se vinculó al pedido. Prepararemos la entrega por email.", expired: "Factura vencida", expiredText: "No transfieras este importe. Crea una factura nueva.", retry: "Crear nueva factura", networkWarning: "Los dígitos únicos son el código del pedido. Envía el importe exacto.", unavailable: "El pago automático aún se está conectando. Solicita un enlace verificado." },
   fr: { email: "E-mail de livraison", emailPlaceholder: "vous@exemple.com", accept: "J’accepte les Conditions et la Politique de remboursement", create: "Créer la facture USDT sécurisée", creating: "Création de la facture…", wallet: "Adresse TRC-20", exactAmount: "Envoyez exactement", expires: "Temps restant", copy: "Copier", copied: "Copié", waiting: "En attente d’une transaction TRON confirmée…", paid: "Paiement confirmé", paidText: "La transaction correspond à la commande. La livraison par e-mail est en préparation.", expired: "Facture expirée", expiredText: "N’envoyez pas ce montant. Créez une nouvelle facture.", retry: "Créer une nouvelle facture", networkWarning: "Les chiffres uniques sont le code de commande. Envoyez le montant exact.", unavailable: "Le paiement automatique est en cours de connexion. Demandez un lien vérifié." },
   de: { email: "E-Mail für Lieferung", emailPlaceholder: "du@beispiel.de", accept: "Ich akzeptiere Bedingungen und Rückerstattungsrichtlinie", create: "Sichere USDT-Rechnung erstellen", creating: "Rechnung wird erstellt…", wallet: "TRC-20-Adresse", exactAmount: "Exakt senden", expires: "Verbleibende Zeit", copy: "Kopieren", copied: "Kopiert", waiting: "Warten auf eine bestätigte TRON-Transaktion…", paid: "Zahlung bestätigt", paidText: "Die Transaktion wurde zugeordnet. Die Lieferung per E-Mail wird vorbereitet.", expired: "Rechnung abgelaufen", expiredText: "Diesen Betrag nicht mehr senden. Erstelle eine neue Rechnung.", retry: "Neue Rechnung erstellen", networkWarning: "Die eindeutigen Ziffern sind der Bestellcode. Sende exakt den Betrag.", unavailable: "Die automatische Zahlung wird noch verbunden. Fordere einen geprüften Link an." },
@@ -103,13 +111,14 @@ const PAYMENT_COPY: Record<Language, PaymentCopy> = {
 
 const DEFAULT_ORDER: Order = {
   plan: "esim-free-plan",
-  destination: "—",
-  data: "—",
-  validity: "—",
+  destination: "-",
+  data: "-",
+  validity: "-",
   price: null,
 };
 
-const PAYMENT_API_URL = process.env.NEXT_PUBLIC_PAYMENT_API_URL?.replace(/\/$/, "") ?? "";
+const PAYMENT_API_URL = process.env.NEXT_PUBLIC_PAYMENT_API_URL?.replace(/\/$/, "")
+  ?? "https://esim-free-payments.b3gg.workers.dev";
 const STORAGE_KEY = "esim-free-active-order";
 
 function clean(value: string | null, fallback: string) {
@@ -214,7 +223,7 @@ export default function CheckoutClient() {
   }, [payment?.status]);
 
   const requestHref = useMemo(() => {
-    const subject = `Esim.free crypto payment — ${order.plan}`;
+    const subject = `Esim.free crypto payment - ${order.plan}`;
     const body = [
       "Please send me the verified crypto payment link for this Esim.free order:",
       `Plan: ${order.plan}`,
@@ -228,7 +237,7 @@ export default function CheckoutClient() {
 
   const displayedAmount = payment ? Number(payment.baseAmount) : order.price;
   const formattedPrice = displayedAmount === null || !Number.isFinite(displayedAmount)
-    ? "—"
+    ? "-"
     : new Intl.NumberFormat(language, { style: "currency", currency: "USD" }).format(displayedAmount);
 
   async function createInvoice() {
@@ -323,7 +332,7 @@ export default function CheckoutClient() {
                 disabled={busy || !email || !accepted}
                 onClick={() => void createInvoice()}
               >
-                {busy ? p.creating : PAYMENT_API_URL ? p.create : t.request} <span aria-hidden="true">→</span>
+                {busy ? p.creating : PAYMENT_API_URL ? p.create : t.request} <span aria-hidden="true">-</span>
               </button>
               {!PAYMENT_API_URL && <p className="checkout-service-note">{p.unavailable}</p>}
               {error && <p className="checkout-error" role="alert">{error}</p>}
@@ -355,7 +364,27 @@ export default function CheckoutClient() {
           {payment && liveStatus === "paid" && (
             <div className="crypto-result crypto-result-success" role="status">
               <strong>{p.paid}</strong>
-              <p>{p.paidText}</p>
+              {payment.esim?.qr_code ? (
+                <div className="esim-delivery">
+                  <img
+                    className="esim-qr"
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(payment.esim.qr_code)}`}
+                    alt="eSIM QR"
+                    width={240}
+                    height={240}
+                  />
+                  {payment.esim.iccid && <p className="esim-code">ICCID: <code>{payment.esim.iccid}</code></p>}
+                  {payment.esim.smdp_address && payment.esim.activation_code && (
+                    <p className="esim-code">SM-DP+: <code>{payment.esim.smdp_address}</code> · <code>{payment.esim.activation_code}</code></p>
+                  )}
+                  <p className="esim-install-links">
+                    {payment.esim.ios_install_url && <a href={payment.esim.ios_install_url}>iPhone</a>}
+                    {payment.esim.android_install_url && <a href={payment.esim.android_install_url}>Android</a>}
+                  </p>
+                </div>
+              ) : (
+                <p>{p.paidText}</p>
+              )}
               {payment.transactionId && <small>TX: {payment.transactionId}</small>}
             </div>
           )}
@@ -372,7 +401,7 @@ export default function CheckoutClient() {
         </article>
       </section>
 
-      <Link className="checkout-back" href="/#catalog">← {t.back}</Link>
+      <Link className="checkout-back" href="/#catalog">- {t.back}</Link>
     </>
   );
 }

@@ -36,6 +36,16 @@ type OrderRow = {
   created_at: number;
   expires_at: number;
   paid_at: number | null;
+  esim_json: string | null;
+};
+
+type EsimDetails = {
+  iccid: string | null;
+  qr_code: string | null;
+  smdp_address: string | null;
+  activation_code: string | null;
+  ios_install_url: string | null;
+  android_install_url: string | null;
 };
 
 type PendingOrderRow = Pick<
@@ -149,7 +159,7 @@ async function createOrder(request: Request, env: Env): Promise<Response> {
   }
 
   const planId = typeof body.planId === "string" ? body.planId.trim() : "";
-  if (!/^[a-z0-9-]{5,64}$/.test(planId)) {
+  if (!/^[A-Za-z0-9_-]{5,64}$/.test(planId)) {
     throw new ApiError(400, "invalid_plan", "Select a valid plan");
   }
 
@@ -243,7 +253,7 @@ async function getOrder(request: Request, env: Env, orderId: string): Promise<Re
   const order = await env.DB.prepare(
     `SELECT id, access_token_hash, email, plan_id, country, data_label, validity_days,
             base_amount_micros, unique_amount_micros, suffix, status,
-            fulfillment_status, txid, created_at, expires_at, paid_at
+            fulfillment_status, txid, created_at, expires_at, paid_at, esim_json
        FROM orders
       WHERE id = ? AND access_token_hash = ?`,
   ).bind(orderId, tokenHash).first<OrderRow>();
@@ -256,7 +266,7 @@ async function findOrderByToken(db: D1Database, tokenHash: string): Promise<Orde
   return db.prepare(
     `SELECT id, access_token_hash, email, plan_id, country, data_label, validity_days,
             base_amount_micros, unique_amount_micros, suffix, status,
-            fulfillment_status, txid, created_at, expires_at, paid_at
+            fulfillment_status, txid, created_at, expires_at, paid_at, esim_json
        FROM orders
       WHERE access_token_hash = ?`,
   ).bind(tokenHash).first<OrderRow>();
@@ -292,6 +302,7 @@ function orderResponse(
       data: order.data_label,
       validityDays: order.validity_days,
     },
+    esim: order.fulfillment_status === "fulfilled" ? parseEsim(order.esim_json) : null,
   }, status);
 }
 
@@ -340,6 +351,8 @@ async function reconcilePayments(env: Env, now: number): Promise<{
         const changes = Number(update.meta.changes ?? 0);
         if (changes < 1) continue;
 
+        await fulfillOrder(env, order.id);
+
         await env.DB.prepare(
           `INSERT OR IGNORE INTO payment_events (
             txid, amount_micros, payer_address, recipient_address,
@@ -376,6 +389,68 @@ async function reconcilePayments(env: Env, now: number): Promise<{
     matchedPayments,
     expiredOrders: Number(expiration.meta.changes ?? 0),
   };
+}
+
+async function fulfillOrder(env: Env, orderId: string): Promise<void> {
+  const order = await env.DB.prepare(
+    `SELECT id, plan_id, fulfillment_status FROM orders WHERE id = ?`,
+  ).bind(orderId).first<{ id: string; plan_id: string; fulfillment_status: string }>();
+  if (!order || order.fulfillment_status === "fulfilled") return;
+
+  try {
+    const response = await fetch(`${env.ESIMERGE_BASE_URL}/orders`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${env.ESIMERGE_KEY}`,
+        "content-type": "application/json",
+        "idempotency-key": orderId,
+      },
+      body: JSON.stringify({ plan_id: order.plan_id, quantity: 1 }),
+    });
+    const payload = await readBoundedJson<{
+      esim?: Record<string, unknown>;
+      error?: { code?: string; message?: string };
+    }>(response, 1_000_000);
+
+    const esim = payload.esim;
+    if (!response.ok || !esim) {
+      throw new Error(payload.error?.message || `Supplier returned HTTP ${response.status}`);
+    }
+
+    const details: EsimDetails = {
+      iccid: typeof esim.iccid === "string" ? esim.iccid : null,
+      qr_code: typeof esim.qr_code === "string" ? esim.qr_code : null,
+      smdp_address: typeof esim.smdp_address === "string" ? esim.smdp_address : null,
+      activation_code: typeof esim.activation_code === "string" ? esim.activation_code : null,
+      ios_install_url: typeof esim.ios_install_url === "string" ? esim.ios_install_url : null,
+      android_install_url: typeof esim.android_install_url === "string" ? esim.android_install_url : null,
+    };
+
+    await env.DB.prepare(
+      `UPDATE orders
+          SET fulfillment_status = 'fulfilled', esim_json = ?, fulfilled_at = ?
+        WHERE id = ?`,
+    ).bind(JSON.stringify(details), Date.now(), orderId).run();
+    console.log(JSON.stringify({ event: "esim_fulfilled", orderId, iccid: details.iccid }));
+  } catch (error) {
+    await env.DB.prepare(
+      `UPDATE orders SET fulfillment_status = 'manual_required' WHERE id = ? AND fulfillment_status != 'fulfilled'`,
+    ).bind(orderId).run();
+    console.error(JSON.stringify({
+      event: "esim_fulfillment_failed",
+      orderId,
+      message: error instanceof Error ? error.message : "Unknown error",
+    }));
+  }
+}
+
+function parseEsim(raw: string | null): EsimDetails | null {
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as EsimDetails;
+  } catch {
+    return null;
+  }
 }
 
 async function fetchConfirmedTransfers(env: Env, minTimestamp: number): Promise<TronGridTransfer[]> {
