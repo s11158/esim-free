@@ -8,11 +8,22 @@ export const metadata: Metadata = {
 };
 
 const PLANS = [
-  { name: "Turkey", duration: "14 days", data: "10 GB", coverage: "Turkey", price: "$2.13", featured: true },
-  { name: "Vietnam", duration: "15 days", data: "20 GB", coverage: "Vietnam", price: "$6.21" },
-  { name: "Canada", duration: "30 days", data: "75 GB", coverage: "Canada", price: "$22.00" },
-  { name: "United Arab Emirates", duration: "20 days", data: "50 GB", coverage: "United Arab Emirates", price: "$45.00" },
+  { id: "pricing-turkey-10gb", name: "Turkey", duration: "14 days", data: "10 GB", coverage: "Turkey", price: 2.13, featured: true },
+  { id: "pricing-vietnam-20gb", name: "Vietnam", duration: "15 days", data: "20 GB", coverage: "Vietnam", price: 6.21 },
+  { id: "pricing-canada-75gb", name: "Canada", duration: "30 days", data: "75 GB", coverage: "Canada", price: 22 },
+  { id: "pricing-uae-50gb", name: "United Arab Emirates", duration: "20 days", data: "50 GB", coverage: "United Arab Emirates", price: 45 },
 ];
+
+function checkoutHref(plan: (typeof PLANS)[number]) {
+  const params = new URLSearchParams({
+    plan: plan.id,
+    destination: plan.coverage,
+    data: plan.data,
+    validity: plan.duration,
+    price: plan.price.toFixed(2),
+  });
+  return `/checkout/?${params.toString()}`;
+}
 
 export default function PricingPage() {
   return (
@@ -22,7 +33,7 @@ export default function PricingPage() {
           <article className={`pricing-card${plan.featured ? " pricing-card-featured" : ""}`} key={plan.name}>
             {plan.featured && <span className="pricing-badge">Most popular</span>}
             <p>{plan.name}</p>
-            <strong>{plan.price}</strong>
+            <strong>${plan.price.toFixed(2)}</strong>
             <span>one-time payment</span>
             <ul>
               <li>{plan.data}</li>
@@ -31,7 +42,7 @@ export default function PricingPage() {
               <li>QR delivery by email</li>
               <li>Activation guide and support</li>
             </ul>
-            <a href={`mailto:staskochukov@gmail.com?subject=${encodeURIComponent(`esim.free order — ${plan.name}`)}`}>Order this plan</a>
+            <a href={checkoutHref(plan)}>Buy from esim.free</a>
           </article>
         ))}
       </section>
@@ -45,7 +56,7 @@ export default function PricingPage() {
       <section>
         <h2>Delivery and activation</h2>
         <p>After successful payment, the customer receives an eSIM QR code and installation instructions electronically. Most orders are delivered within minutes. A compatible, carrier-unlocked device and internet access for installation are required.</p>
-        <p>The secure payment provider or Merchant of Record shown at checkout processes the payment, applicable tax and receipt. While online checkout is being prepared, contact <a href="mailto:staskochukov@gmail.com">staskochukov@gmail.com</a> to confirm current availability.</p>
+        <p>Every purchase starts in the esim.free checkout with the selected product, price and destination already filled in. No order button redirects to an upstream eSIM supplier.</p>
       </section>
 
       <section>

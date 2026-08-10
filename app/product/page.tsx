@@ -36,7 +36,7 @@ export default function ProductPage() {
 
       <section>
         <h2>Who provides the service</h2>
-        <p>esim.free is the customer-facing store, seller and support contact. We source eSIM provisioning and mobile connectivity from upstream technology and network suppliers, then offer selected fixed plans in our own catalogue. Customers purchase from esim.free rather than being redirected to a supplier or affiliate checkout.</p>
+        <p>esim.free is the customer-facing store, seller and support contact. We source eSIM provisioning and mobile connectivity from upstream technology and network suppliers, then offer selected fixed plans in our own catalogue. Customers purchase from esim.free rather than being redirected to an external supplier storefront.</p>
       </section>
 
       <section>

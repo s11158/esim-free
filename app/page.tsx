@@ -13,7 +13,6 @@ type Plan = {
   days: number;
   price: number;
   pricePerGb: number;
-  promo?: string;
   fiveG?: boolean;
 };
 
@@ -43,34 +42,26 @@ const COUNTRIES: Record<string, Country> = {
   global: { code: "001", flag: "🌍" },
 };
 
-const PROVIDER_INFO: Record<string, { label: string; url: string; accent: string }> = {
-  Airalo: { label: "Airalo", url: "https://airalo.tpx.gr/zKWubZS0", accent: "#ff6b5f" },
-  Yesim: { label: "Yesim", url: "https://yesim.tpx.gr/H3g2VJiB", accent: "#a7f45c" },
-  Maya: { label: "Maya Mobile", url: "https://mayamobile.pxf.io/k4bdrM", accent: "#7ec8ff" },
-  Saily: { label: "Saily", url: "https://saily.com/", accent: "#7e7bff" },
-  "Stellar eSim": {
-    label: "Stellar",
-    url: "https://stellarafi.com/r/ESIM?src=esim.pizza&campaign=esim_pizza_comparison&product=DIGITAL+Product",
-    accent: "#ffe45e",
-  },
-  "Giga.Tel": { label: "Giga.Tel", url: "https://www.giga.tel/", accent: "#fb62c7" },
-  Superalink: {
-    label: "Superalink",
-    url: "https://www.superalink.com/destination/aff/STAS00000",
-    accent: "#00e6bc",
-  },
-  eSIM4Travel: { label: "eSIM4Travel", url: "https://www.esim4travel.com/", accent: "#f3a34b" },
-  eSIMCard: { label: "eSIMCard", url: "https://esimcard.com/", accent: "#4be0ff" },
-  BNESIM: { label: "BNESIM", url: "https://www.bnesim.com/", accent: "#e2ff63" },
-  Roamify: { label: "Roamify", url: "https://www.getroamify.com/", accent: "#ff8f70" },
-  "Sim Local": { label: "Sim Local", url: "https://www.simlocal.com/", accent: "#bd9cff" },
+const PROVIDER_INFO: Record<string, { accent: string }> = {
+  Airalo: { accent: "#ff6b5f" },
+  Yesim: { accent: "#a7f45c" },
+  Maya: { accent: "#7ec8ff" },
+  Saily: { accent: "#7e7bff" },
+  "Stellar eSim": { accent: "#ffe45e" },
+  "Giga.Tel": { accent: "#fb62c7" },
+  Superalink: { accent: "#00e6bc" },
+  eSIM4Travel: { accent: "#f3a34b" },
+  eSIMCard: { accent: "#4be0ff" },
+  BNESIM: { accent: "#e2ff63" },
+  Roamify: { accent: "#ff8f70" },
+  "Sim Local": { accent: "#bd9cff" },
 };
 
 const CURATED_PLANS: Plan[] = [
-  { id: "maya-3", country: "global", provider: "Maya", name: "Unlimited · 180 стран", gb: 999, days: 3, price: 9.99, pricePerGb: 0, promo: "ESIMPIZZA" },
-  { id: "maya-7", country: "global", provider: "Maya", name: "Unlimited · 180 стран", gb: 999, days: 7, price: 19.99, pricePerGb: 0, promo: "ESIMPIZZA" },
-  { id: "maya-14", country: "global", provider: "Maya", name: "Unlimited · 180 стран", gb: 999, days: 14, price: 27.99, pricePerGb: 0, promo: "ESIMPIZZA" },
-  { id: "maya-30", country: "global", provider: "Maya", name: "Unlimited · 180 стран", gb: 999, days: 30, price: 49.99, pricePerGb: 0, promo: "ESIMPIZZA" },
+  { id: "maya-3", country: "global", provider: "Maya", name: "Unlimited · 180 стран", gb: 999, days: 3, price: 9.99, pricePerGb: 0 },
+  { id: "maya-7", country: "global", provider: "Maya", name: "Unlimited · 180 стран", gb: 999, days: 7, price: 19.99, pricePerGb: 0 },
+  { id: "maya-14", country: "global", provider: "Maya", name: "Unlimited · 180 стран", gb: 999, days: 14, price: 27.99, pricePerGb: 0 },
+  { id: "maya-30", country: "global", provider: "Maya", name: "Unlimited · 180 стран", gb: 999, days: 30, price: 49.99, pricePerGb: 0 },
   { id: "airalo-tr-7", country: "turkey", provider: "Airalo", name: "Unlimited · Turk Telekom", gb: 999, days: 7, price: 24.5, pricePerGb: 0 },
   { id: "airalo-th-7", country: "thailand", provider: "Airalo", name: "Unlimited · dtac", gb: 999, days: 7, price: 21.5, pricePerGb: 0 },
   { id: "airalo-th-30", country: "thailand", provider: "Airalo", name: "Unlimited · dtac", gb: 999, days: 30, price: 49, pricePerGb: 0 },
@@ -167,7 +158,7 @@ function parseMarketCsv(csv: string): Plan[] {
     .split(/\r?\n/)
     .slice(1)
     .map((line, index) => {
-      const [country, provider, name, gb, days, price, pricePerGb, promo, fiveG] = splitCsvLine(line);
+      const [country, provider, name, gb, days, price, pricePerGb, , fiveG] = splitCsvLine(line);
       return {
         id: `market-${index}`,
         country,
@@ -177,7 +168,6 @@ function parseMarketCsv(csv: string): Plan[] {
         days: Number(days),
         price: Number(price),
         pricePerGb: Number(pricePerGb),
-        promo: promo || undefined,
         fiveG: fiveG === "yes",
       };
     })
@@ -416,6 +406,13 @@ export default function Home() {
             <div className="plan-list">
               {results.slice(0, visible).map((plan, index) => {
                 const provider = PROVIDER_INFO[plan.provider];
+                const checkoutParams = new URLSearchParams({
+                  plan: plan.id,
+                  destination: currentCountryLabel,
+                  data: formatData(plan, t),
+                  validity: formatDays(plan.days, t),
+                  price: plan.price.toFixed(2),
+                });
                 return (
                   <article className="plan" key={plan.id}>
                     <div className="rank" aria-label={`#${index + 1}`}>{String(index + 1).padStart(2, "0")}</div>
@@ -434,10 +431,9 @@ export default function Home() {
                     <div className="plan-price">
                       {index === 0 && <span className="best">{t.best}</span>}
                       <strong>{price(plan.price, language)}</strong>
-                      {plan.promo && <span>−10% · {plan.promo}</span>}
                     </div>
-                    <a className="plan-link" href="/pricing/" aria-label={`${t.choose}: esim.free`}>
-                      {t.choose} <span aria-hidden="true">↗</span>
+                    <a className="plan-link" href={`/checkout/?${checkoutParams.toString()}`} aria-label={`${t.choose}: esim.free`}>
+                      {t.choose} <span aria-hidden="true">→</span>
                     </a>
                   </article>
                 );
