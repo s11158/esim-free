@@ -1,8 +1,13 @@
-import { readBoundedText, type ResolvedPlan } from "./core";
+import { readBoundedText, type ResolvedPlan, type SupplierName } from "./core";
 
-// catalog.csv columns: id,scope,dest_code,dest_name,gb,days,price_usd,unlimited,minutes,sms,coverage
-const MAX_CATALOG_BYTES = 4_000_000;
+// catalog.csv columns:
+//   id,scope,dest_code,dest_name,gb,days,price_usd,unlimited,minutes,sms,coverage[,source,source_plan_id]
+// The two trailing columns are optional: rows without them are eSimerge plans
+// whose supplier plan id equals the catalogue id, which is how the catalogue
+// looked before the second supplier was added.
+const MAX_CATALOG_BYTES = 6_000_000;
 const PLAN_ID_PATTERN = /^[A-Za-z0-9_-]{5,64}$/;
+const SUPPLIERS: SupplierName[] = ["esimerge", "stellar"];
 
 export class CatalogError extends Error {
   constructor(message: string, readonly status: number) {
@@ -26,18 +31,23 @@ export async function resolvePlan(
   const needle = planId + ",";
   for (const line of csv.split(/\r?\n/)) {
     if (!line.startsWith(needle)) continue;
-    const [id, , , destName, gbRaw, daysRaw, priceRaw, unlimitedRaw] = splitCsvLine(line);
+    const cells = splitCsvLine(line);
+    const [id, , , destName, gbRaw, daysRaw, priceRaw, unlimitedRaw] = cells;
     if (id !== planId) continue;
 
     const gb = Number(gbRaw);
     const days = Number(daysRaw);
     const price = Number(priceRaw);
     const unlimited = unlimitedRaw === "yes" || gb >= 1000;
+    const sourceRaw = (cells[11] ?? "").trim().toLowerCase();
+    const source: SupplierName = sourceRaw === "" ? "esimerge" : (SUPPLIERS.find((s) => s === sourceRaw) ?? "unknown");
+    const sourcePlanId = (cells[12] ?? "").trim() || planId;
 
     if (!destName
       || !Number.isFinite(gb) || gb < 0
       || !Number.isInteger(days) || days < 0
-      || !Number.isFinite(price) || price <= 0) {
+      || !Number.isFinite(price) || price <= 0
+      || source === "unknown") {
       throw new CatalogError("Plan data is invalid", 503);
     }
 
@@ -47,6 +57,8 @@ export async function resolvePlan(
       dataLabel: unlimited ? "Unlimited" : gb < 1 ? `${Math.round(gb * 1024)} MB` : `${formatNumber(gb)} GB`,
       validityDays: days,
       priceCents: Math.round(price * 100),
+      source,
+      sourcePlanId,
     };
   }
 
@@ -57,7 +69,7 @@ function formatNumber(value: number): string {
   return Number.isInteger(value) ? String(value) : value.toFixed(1);
 }
 
-function splitCsvLine(line: string): string[] {
+export function splitCsvLine(line: string): string[] {
   const cells: string[] = [];
   let cell = "";
   let quoted = false;
