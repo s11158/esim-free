@@ -14,10 +14,17 @@ import {
   readBoundedText,
   sha256Hex,
   transferAmountMicros,
+  type EsimDetails,
   type OrderStatus,
   type ResolvedPlan,
+  type SupplierName,
   type TronGridTransfer,
 } from "./core";
+import { EmailError, sendEsimEmail } from "./email";
+import { SupplierError, extractEsim, orderFromSupplier } from "./suppliers";
+
+type FulfillmentStatus = "not_started" | "manual_required" | "fulfilled" | "failed";
+type EmailStatus = "not_sent" | "sent" | "failed";
 
 type OrderRow = {
   id: string;
@@ -31,27 +38,29 @@ type OrderRow = {
   unique_amount_micros: number;
   suffix: number;
   status: OrderStatus;
-  fulfillment_status: "not_started" | "manual_required" | "fulfilled" | "failed";
+  fulfillment_status: FulfillmentStatus;
   txid: string | null;
   created_at: number;
   expires_at: number;
   paid_at: number | null;
   esim_json: string | null;
+  source: SupplierName;
+  source_plan_id: string | null;
+  fulfillment_attempts: number;
+  fulfillment_error: string | null;
+  email_status: EmailStatus;
+  email_attempts: number;
+  email_error: string | null;
+  email_sent_at: number | null;
 };
 
-type EsimDetails = {
-  iccid: string | null;
-  qr_code: string | null;
-  smdp_address: string | null;
-  activation_code: string | null;
-  ios_install_url: string | null;
-  android_install_url: string | null;
-};
+const ORDER_COLUMNS = `id, access_token_hash, email, plan_id, country, data_label, validity_days,
+            base_amount_micros, unique_amount_micros, suffix, status,
+            fulfillment_status, txid, created_at, expires_at, paid_at, esim_json,
+            source, source_plan_id, fulfillment_attempts, fulfillment_error,
+            email_status, email_attempts, email_error, email_sent_at`;
 
-type PendingOrderRow = Pick<
-  OrderRow,
-  "id" | "unique_amount_micros" | "created_at" | "expires_at"
->;
+type PendingOrderRow = Pick<OrderRow, "id" | "unique_amount_micros" | "created_at" | "expires_at">;
 
 type CreateOrderBody = {
   planId?: unknown;
@@ -89,11 +98,20 @@ class ApiError extends Error {
 }
 
 const ORDER_PATH = /^\/api\/orders\/([0-9a-f-]{36})$/i;
+const ADMIN_ESIM_PATH = /^\/api\/admin\/orders\/([0-9a-f-]{36})\/esim$/i;
+const ADMIN_RETRY_PATH = /^\/api\/admin\/orders\/([0-9a-f-]{36})\/retry$/i;
 const MAX_ORDER_BODY_BYTES = 4_096;
+const MAX_ADMIN_BODY_BYTES = 16_384;
 const MAX_TRONGRID_BYTES = 2_000_000;
 const RATE_LIMIT_PENDING_ORDERS = 5;
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1_000;
 const RECONCILIATION_GRACE_MS = 5 * 60 * 1_000;
+// A paid order keeps retrying the supplier while the error looks temporary
+// (empty wallet, 5xx). After this many attempts it waits for a human.
+const MAX_FULFILLMENT_ATTEMPTS = 60;
+const MAX_EMAIL_ATTEMPTS = 20;
+// Retries per cron tick, so one bad supplier cannot starve the payment scan.
+const RETRY_BATCH = 10;
 
 export default {
   async fetch(request, env): Promise<Response> {
@@ -107,7 +125,20 @@ export default {
           service: "esim-free-payments",
           network: "TRON",
           asset: "USDT",
+          suppliers: configuredSuppliers(env),
+          email: Boolean(env.RESEND_API_KEY && env.MAIL_FROM),
         });
+      }
+
+      const adminEsim = ADMIN_ESIM_PATH.exec(url.pathname);
+      if (request.method === "POST" && adminEsim?.[1]) {
+        requireAdmin(request, env);
+        return await adminAttachEsim(request, env, adminEsim[1]);
+      }
+      const adminRetryMatch = ADMIN_RETRY_PATH.exec(url.pathname);
+      if (request.method === "POST" && adminRetryMatch?.[1]) {
+        requireAdmin(request, env);
+        return await adminRetryOrder(env, adminRetryMatch[1], request);
       }
 
       requireAllowedOrigin(request, env);
@@ -128,18 +159,36 @@ export default {
   },
 
   async scheduled(controller, env): Promise<void> {
+    const now = controller.scheduledTime || Date.now();
     try {
-      const result = await reconcilePayments(env, controller.scheduledTime || Date.now());
+      const result = await reconcilePayments(env, now);
       console.log(JSON.stringify({ event: "payment_reconciliation", ...result }));
     } catch (error) {
       console.error(JSON.stringify({
         event: "payment_reconciliation_failed",
         message: error instanceof Error ? error.message : "Unknown error",
       }));
-      throw error;
+    }
+    // Paid orders that are still waiting for a profile or an email are
+    // retried on every tick, independently of the payment scan above.
+    try {
+      const result = await retryUnfinished(env);
+      if (result.attempted) console.log(JSON.stringify({ event: "fulfillment_retry", ...result }));
+    } catch (error) {
+      console.error(JSON.stringify({
+        event: "fulfillment_retry_failed",
+        message: error instanceof Error ? error.message : "Unknown error",
+      }));
     }
   },
 } satisfies ExportedHandler<Env>;
+
+function configuredSuppliers(env: Env): SupplierName[] {
+  const list: SupplierName[] = [];
+  if (env.ESIMERGE_KEY) list.push("esimerge");
+  if (env.STELLAR_WHOLESALE_KEY && env.STELLAR_WHOLESALE_BASE) list.push("stellar");
+  return list;
+}
 
 async function createOrder(request: Request, env: Env): Promise<Response> {
   if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
@@ -214,8 +263,8 @@ async function createOrder(request: Request, env: Env): Promise<Response> {
         `INSERT INTO orders (
           id, access_token_hash, request_fingerprint, email, plan_id, country,
           data_label, validity_days, base_amount_micros, unique_amount_micros,
-          suffix, status, fulfillment_status, created_at, expires_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'not_started', ?, ?)`,
+          suffix, status, fulfillment_status, created_at, expires_at, source, source_plan_id
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'not_started', ?, ?, ?, ?)`,
       ).bind(
         id,
         tokenHash,
@@ -230,11 +279,13 @@ async function createOrder(request: Request, env: Env): Promise<Response> {
         suffix,
         now,
         expiresAt,
+        plan.source,
+        plan.sourcePlanId,
       ).run();
 
       const created = await findOrderByToken(env.DB, tokenHash);
       if (!created) throw new Error("Created order could not be read");
-      console.log(JSON.stringify({ event: "order_created", orderId: created.id, planId: created.plan_id }));
+      console.log(JSON.stringify({ event: "order_created", orderId: created.id, planId: created.plan_id, source: created.source }));
       return orderResponse(request, env, created, 201);
     } catch (error) {
       if (!isUniqueConstraintError(error)) throw error;
@@ -251,11 +302,7 @@ async function getOrder(request: Request, env: Env, orderId: string): Promise<Re
   if (!accessToken) throw new ApiError(401, "unauthorized", "Order token is missing");
   const tokenHash = await sha256Hex(accessToken);
   const order = await env.DB.prepare(
-    `SELECT id, access_token_hash, email, plan_id, country, data_label, validity_days,
-            base_amount_micros, unique_amount_micros, suffix, status,
-            fulfillment_status, txid, created_at, expires_at, paid_at, esim_json
-       FROM orders
-      WHERE id = ? AND access_token_hash = ?`,
+    `SELECT ${ORDER_COLUMNS} FROM orders WHERE id = ? AND access_token_hash = ?`,
   ).bind(orderId, tokenHash).first<OrderRow>();
 
   if (!order) throw new ApiError(404, "order_not_found", "Order not found");
@@ -263,13 +310,11 @@ async function getOrder(request: Request, env: Env, orderId: string): Promise<Re
 }
 
 async function findOrderByToken(db: D1Database, tokenHash: string): Promise<OrderRow | null> {
-  return db.prepare(
-    `SELECT id, access_token_hash, email, plan_id, country, data_label, validity_days,
-            base_amount_micros, unique_amount_micros, suffix, status,
-            fulfillment_status, txid, created_at, expires_at, paid_at, esim_json
-       FROM orders
-      WHERE access_token_hash = ?`,
-  ).bind(tokenHash).first<OrderRow>();
+  return db.prepare(`SELECT ${ORDER_COLUMNS} FROM orders WHERE access_token_hash = ?`).bind(tokenHash).first<OrderRow>();
+}
+
+async function findOrderById(db: D1Database, orderId: string): Promise<OrderRow | null> {
+  return db.prepare(`SELECT ${ORDER_COLUMNS} FROM orders WHERE id = ?`).bind(orderId).first<OrderRow>();
 }
 
 function orderResponse(
@@ -286,6 +331,7 @@ function orderResponse(
     orderId: order.id,
     status: effectiveStatus,
     fulfillmentStatus: order.fulfillment_status,
+    emailStatus: order.email_status,
     network: "TRON (TRC-20)",
     asset: "USDT",
     walletAddress: env.PAYMENT_WALLET_ADDRESS,
@@ -302,8 +348,17 @@ function orderResponse(
       data: order.data_label,
       validityDays: order.validity_days,
     },
-    esim: order.fulfillment_status === "fulfilled" ? parseEsim(order.esim_json) : null,
+    esim: order.fulfillment_status === "fulfilled" ? publicEsim(parseEsim(order.esim_json)) : null,
   }, status);
+}
+
+// The supplier's own order id stays server-side; the customer only needs the
+// install data.
+function publicEsim(details: EsimDetails | null): Omit<EsimDetails, "supplier_order_id"> | null {
+  if (!details) return null;
+  const rest: EsimDetails = { ...details };
+  delete rest.supplier_order_id;
+  return rest;
 }
 
 async function reconcilePayments(env: Env, now: number): Promise<{
@@ -351,8 +406,6 @@ async function reconcilePayments(env: Env, now: number): Promise<{
         const changes = Number(update.meta.changes ?? 0);
         if (changes < 1) continue;
 
-        await fulfillOrder(env, order.id);
-
         await env.DB.prepare(
           `INSERT OR IGNORE INTO payment_events (
             txid, amount_micros, payer_address, recipient_address,
@@ -371,6 +424,9 @@ async function reconcilePayments(env: Env, now: number): Promise<{
         matchedPayments += 1;
         amountToOrder.delete(amountMicros);
         console.log(JSON.stringify({ event: "payment_matched", orderId: order.id, txid: transfer.transactionId }));
+
+        await fulfillOrder(env, order.id);
+        await deliverOrder(env, order.id);
       } catch (error) {
         if (!isUniqueConstraintError(error)) throw error;
         console.warn(JSON.stringify({ event: "duplicate_payment_ignored", txid: transfer.transactionId }));
@@ -391,56 +447,179 @@ async function reconcilePayments(env: Env, now: number): Promise<{
   };
 }
 
-async function fulfillOrder(env: Env, orderId: string): Promise<void> {
-  const order = await env.DB.prepare(
-    `SELECT id, plan_id, fulfillment_status FROM orders WHERE id = ?`,
-  ).bind(orderId).first<{ id: string; plan_id: string; fulfillment_status: string }>();
-  if (!order || order.fulfillment_status === "fulfilled") return;
+// Buys the profile from the order's supplier. Idempotent: the supplier gets our
+// order id as idempotency key, and a fulfilled order is never bought again.
+async function fulfillOrder(env: Env, orderId: string): Promise<boolean> {
+  const order = await findOrderById(env.DB, orderId);
+  if (!order || order.status !== "paid") return false;
+  if (order.fulfillment_status === "fulfilled") return true;
 
   try {
-    const response = await fetch(`${env.ESIMERGE_BASE_URL}/orders`, {
-      method: "POST",
-      headers: {
-        authorization: `Bearer ${env.ESIMERGE_KEY}`,
-        "content-type": "application/json",
-        "idempotency-key": orderId,
-      },
-      body: JSON.stringify({ plan_id: order.plan_id, quantity: 1 }),
-    });
-    const payload = await readBoundedJson<{
-      esim?: Record<string, unknown>;
-      error?: { code?: string; message?: string };
-    }>(response, 1_000_000);
-
-    const esim = payload.esim;
-    if (!response.ok || !esim) {
-      throw new Error(payload.error?.message || `Supplier returned HTTP ${response.status}`);
-    }
-
-    const details: EsimDetails = {
-      iccid: typeof esim.iccid === "string" ? esim.iccid : null,
-      qr_code: typeof esim.qr_code === "string" ? esim.qr_code : null,
-      smdp_address: typeof esim.smdp_address === "string" ? esim.smdp_address : null,
-      activation_code: typeof esim.activation_code === "string" ? esim.activation_code : null,
-      ios_install_url: typeof esim.ios_install_url === "string" ? esim.ios_install_url : null,
-      android_install_url: typeof esim.android_install_url === "string" ? esim.android_install_url : null,
-    };
+    const details = await orderFromSupplier(order.source, {
+      orderId: order.id,
+      sourcePlanId: order.source_plan_id ?? order.plan_id,
+      email: order.email,
+    }, env);
 
     await env.DB.prepare(
       `UPDATE orders
-          SET fulfillment_status = 'fulfilled', esim_json = ?, fulfilled_at = ?
-        WHERE id = ?`,
+          SET fulfillment_status = 'fulfilled', esim_json = ?, fulfilled_at = ?,
+              fulfillment_attempts = fulfillment_attempts + 1, fulfillment_error = NULL
+        WHERE id = ? AND fulfillment_status != 'fulfilled'`,
     ).bind(JSON.stringify(details), Date.now(), orderId).run();
-    console.log(JSON.stringify({ event: "esim_fulfilled", orderId, iccid: details.iccid }));
+    console.log(JSON.stringify({ event: "esim_fulfilled", orderId, source: order.source, iccid: details.iccid }));
+    return true;
   } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    const retryable = error instanceof SupplierError ? error.retryable : true;
+    const attempts = order.fulfillment_attempts + 1;
+    // A permanent supplier rejection or too many temporary ones parks the order
+    // for a human; anything else stays in the retry queue.
+    const nextStatus: FulfillmentStatus = !retryable || attempts >= MAX_FULFILLMENT_ATTEMPTS ? "failed" : "manual_required";
     await env.DB.prepare(
-      `UPDATE orders SET fulfillment_status = 'manual_required' WHERE id = ? AND fulfillment_status != 'fulfilled'`,
-    ).bind(orderId).run();
-    console.error(JSON.stringify({
-      event: "esim_fulfillment_failed",
-      orderId,
-      message: error instanceof Error ? error.message : "Unknown error",
-    }));
+      `UPDATE orders
+          SET fulfillment_status = ?, fulfillment_attempts = ?, fulfillment_error = ?
+        WHERE id = ? AND fulfillment_status != 'fulfilled'`,
+    ).bind(nextStatus, attempts, message.slice(0, 500), orderId).run();
+    console.error(JSON.stringify({ event: "esim_fulfillment_failed", orderId, source: order.source, attempts, retryable, message }));
+    if (attempts === 1 || nextStatus === "failed") {
+      await notifyOwner(env, [
+        `Заказ ${order.id} не исполнен (${order.source}, попытка ${attempts}${nextStatus === "failed" ? ", остановлено" : ", будет повтор"})`,
+        `${order.country} · ${order.data_label} · ${order.validity_days} дн · ${order.email}`,
+        message,
+      ].join("\n"));
+    }
+    return false;
+  }
+}
+
+// Emails the profile once it exists. Separate from fulfillment so that an
+// email outage never blocks buying, and a bought profile is never re-bought
+// because the email failed.
+async function deliverOrder(env: Env, orderId: string): Promise<boolean> {
+  const order = await findOrderById(env.DB, orderId);
+  if (!order || order.fulfillment_status !== "fulfilled" || order.email_status === "sent") return order?.email_status === "sent";
+  const esim = parseEsim(order.esim_json);
+  if (!esim) return false;
+
+  try {
+    await sendEsimEmail(order.email, {
+      orderId: order.id,
+      country: order.country,
+      dataLabel: order.data_label,
+      validityDays: order.validity_days,
+      esim,
+    }, env);
+    await env.DB.prepare(
+      `UPDATE orders
+          SET email_status = 'sent', email_sent_at = ?, email_attempts = email_attempts + 1, email_error = NULL
+        WHERE id = ?`,
+    ).bind(Date.now(), orderId).run();
+    console.log(JSON.stringify({ event: "esim_emailed", orderId }));
+    return true;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    const retryable = error instanceof EmailError ? error.retryable : true;
+    const attempts = order.email_attempts + 1;
+    const nextStatus: EmailStatus = !retryable || attempts >= MAX_EMAIL_ATTEMPTS ? "failed" : "not_sent";
+    await env.DB.prepare(
+      `UPDATE orders SET email_status = ?, email_attempts = ?, email_error = ? WHERE id = ?`,
+    ).bind(nextStatus, attempts, message.slice(0, 500), orderId).run();
+    console.error(JSON.stringify({ event: "esim_email_failed", orderId, attempts, retryable, message }));
+    if (attempts === 1 || nextStatus === "failed") {
+      await notifyOwner(env, [`Письмо с QR по заказу ${order.id} не отправлено (${order.email})`, message].join("\n"));
+    }
+    return false;
+  }
+}
+
+async function retryUnfinished(env: Env): Promise<{ attempted: number; fulfilled: number; emailed: number }> {
+  const rows = await env.DB.prepare(
+    `SELECT id FROM orders
+      WHERE status = 'paid'
+        AND (fulfillment_status = 'manual_required' OR (fulfillment_status = 'fulfilled' AND email_status = 'not_sent'))
+      ORDER BY paid_at ASC
+      LIMIT ?`,
+  ).bind(RETRY_BATCH).all<{ id: string }>();
+  let fulfilled = 0;
+  let emailed = 0;
+  for (const row of rows.results) {
+    if (await fulfillOrder(env, row.id)) fulfilled += 1;
+    if (await deliverOrder(env, row.id)) emailed += 1;
+  }
+  return { attempted: rows.results.length, fulfilled, emailed };
+}
+
+// Manual fallback: the owner buys the profile in a supplier dashboard (or via
+// an affiliate link) and pastes the result here. The customer then gets the
+// same email as an automatic order.
+async function adminAttachEsim(request: Request, env: Env, orderId: string): Promise<Response> {
+  const raw = await readBoundedText(new Response(request.body, { headers: request.headers }), MAX_ADMIN_BODY_BYTES);
+  let payload: unknown;
+  try {
+    payload = JSON.parse(raw) as unknown;
+  } catch {
+    throw new ApiError(400, "invalid_json", "Request body is not valid JSON");
+  }
+  const order = await findOrderById(env.DB, orderId);
+  if (!order) throw new ApiError(404, "order_not_found", "Order not found");
+  if (order.status !== "paid") throw new ApiError(409, "order_not_paid", "Only paid orders can receive an eSIM");
+  if (order.fulfillment_status === "fulfilled") throw new ApiError(409, "already_fulfilled", "Order already has an eSIM");
+  const details = extractEsim(payload);
+  if (!details) throw new ApiError(400, "invalid_esim", "Provide at least an LPA string (qr_code) or smdp_address plus activation_code");
+
+  await env.DB.prepare(
+    `UPDATE orders
+        SET fulfillment_status = 'fulfilled', esim_json = ?, fulfilled_at = ?, fulfillment_error = NULL
+      WHERE id = ?`,
+  ).bind(JSON.stringify({ ...details, supplier_order_id: details.supplier_order_id ?? "manual" }), Date.now(), orderId).run();
+  console.log(JSON.stringify({ event: "esim_attached_manually", orderId }));
+  const emailed = await deliverOrder(env, orderId);
+  const updated = await findOrderById(env.DB, orderId);
+  return jsonResponse(request, env, { ok: true, emailed, fulfillmentStatus: updated?.fulfillment_status, emailStatus: updated?.email_status });
+}
+
+// Re-queues a parked order after the wallet was topped up or the supplier
+// fixed their side.
+async function adminRetryOrder(env: Env, orderId: string, request: Request): Promise<Response> {
+  const order = await findOrderById(env.DB, orderId);
+  if (!order) throw new ApiError(404, "order_not_found", "Order not found");
+  if (order.status !== "paid") throw new ApiError(409, "order_not_paid", "Only paid orders can be retried");
+  await env.DB.prepare(
+    `UPDATE orders
+        SET fulfillment_status = CASE WHEN fulfillment_status = 'fulfilled' THEN 'fulfilled' ELSE 'manual_required' END,
+            fulfillment_attempts = 0,
+            email_status = CASE WHEN email_status = 'sent' THEN 'sent' ELSE 'not_sent' END,
+            email_attempts = 0
+      WHERE id = ?`,
+  ).bind(orderId).run();
+  const fulfilled = await fulfillOrder(env, orderId);
+  const emailed = await deliverOrder(env, orderId);
+  const updated = await findOrderById(env.DB, orderId);
+  return jsonResponse(request, env, {
+    ok: true,
+    fulfilled,
+    emailed,
+    fulfillmentStatus: updated?.fulfillment_status,
+    fulfillmentError: updated?.fulfillment_error,
+    emailStatus: updated?.email_status,
+    emailError: updated?.email_error,
+  });
+}
+
+// Telegram is optional: without a token the alert only lands in the logs.
+async function notifyOwner(env: Env, text: string): Promise<void> {
+  const token = (env.TELEGRAM_BOT_TOKEN ?? "").trim();
+  const chatId = (env.TELEGRAM_CHAT_ID ?? "").trim();
+  if (!token || !chatId) return;
+  try {
+    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ chat_id: chatId, text: `esim.free\n${text}`.slice(0, 4000), disable_web_page_preview: true }),
+    });
+  } catch (error) {
+    console.warn(JSON.stringify({ event: "owner_alert_failed", message: error instanceof Error ? error.message : "Unknown error" }));
   }
 }
 
@@ -526,6 +705,22 @@ function requireAllowedOrigin(request: Request, env: Env): void {
   if (origin && origin !== env.ALLOWED_ORIGIN) {
     throw new ApiError(403, "origin_not_allowed", "Origin is not allowed");
   }
+}
+
+// Admin calls come from the owner's terminal, never from the storefront, so
+// they are keyed by a separate secret and never carry CORS headers.
+function requireAdmin(request: Request, env: Env): void {
+  const expected = (env.ADMIN_TOKEN ?? "").trim();
+  const provided = (request.headers.get("x-admin-token") ?? "").trim();
+  if (!expected || provided.length !== expected.length || !timingSafeEqual(provided, expected)) {
+    throw new ApiError(401, "unauthorized", "Admin token is missing or wrong");
+  }
+}
+
+function timingSafeEqual(a: string, b: string): boolean {
+  let diff = 0;
+  for (let i = 0; i < a.length; i += 1) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
 }
 
 function corsHeaders(request: Request, env: Env): Record<string, string> {

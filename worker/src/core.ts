@@ -3,12 +3,29 @@ export const SUFFIX_MICROS = 100;
 
 export type OrderStatus = "pending" | "paid" | "expired" | "manual_review";
 
+export type SupplierName = "esimerge" | "stellar" | "unknown";
+
 export type ResolvedPlan = {
   id: string;
   country: string;
   dataLabel: string;
   validityDays: number;
   priceCents: number;
+  source: SupplierName;
+  sourcePlanId: string;
+};
+
+// Everything a customer needs to install the profile. Every field is optional
+// because suppliers disagree on what they return; the email and the checkout
+// page render whatever is present.
+export type EsimDetails = {
+  iccid: string | null;
+  qr_code: string | null;
+  smdp_address: string | null;
+  activation_code: string | null;
+  ios_install_url: string | null;
+  android_install_url: string | null;
+  supplier_order_id?: string | null;
 };
 
 export type TronGridTransfer = {

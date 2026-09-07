@@ -7,14 +7,27 @@
   "vars": {
     "ALLOWED_ORIGIN": "https://esim.free",
     "CATALOG_URL": "https://esim.free/data/catalog.csv",
+    "STORE_URL": "https://esim.free",
     "PAYMENT_WALLET_ADDRESS": "TLwjVQ39DfxSsTRgnuvqBGRuRipZopZogs",
     "PAYMENT_WINDOW_MINUTES": "60",
     "TRONGRID_BASE_URL": "https://api.trongrid.io",
     "USDT_TRC20_CONTRACT": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
-    "ESIMERGE_BASE_URL": "https://portal.esimerge.com/api/public/v1"
+    "ESIMERGE_BASE_URL": "https://portal.esimerge.com/api/public/v1",
+    // Stellar Wholesale API root, e.g. https://wholesale.stellarsecurity.com/api/v1
+    // (the same value the esim repo's fetch-stellar-wholesale.mjs uses). Orders go
+    // to {base}/orders, the catalogue is read from {base}/plans.
+    "STELLAR_WHOLESALE_BASE": "",
+    // Sender for the QR email. The domain must be verified in the Resend dashboard.
+    "MAIL_FROM": "Esim.free <esim@esim.free>",
+    "MAIL_REPLY_TO": "staskochukov@gmail.com"
   },
   "secrets": {
-    "required": ["ORDER_HMAC_SECRET", "ESIMERGE_KEY"]
+    // ESIMERGE_KEY          eSimerge partner API key (wallet prepaid in their portal)
+    // STELLAR_WHOLESALE_KEY Stellar Wholesale API key (optional, enables the second supplier)
+    // RESEND_API_KEY        Resend API key for the QR email
+    // ADMIN_TOKEN           long random string for /api/admin/* (manual QR paste, retry)
+    // TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID  optional owner alerts on failed orders
+    "required": ["ORDER_HMAC_SECRET", "ESIMERGE_KEY", "RESEND_API_KEY", "ADMIN_TOKEN"]
   },
   "d1_databases": [
     {
