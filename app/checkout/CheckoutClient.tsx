@@ -232,7 +232,7 @@ export default function CheckoutClient() {
       `Validity: ${order.validity}`,
       `Total: ${order.price === null ? "to confirm" : `$${order.price.toFixed(2)} USD`}`,
     ].join("\n");
-    return `mailto:staskochukov@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    return `mailto:support@esim.free?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }, [order]);
 
   const displayedAmount = payment ? Number(payment.baseAmount) : order.price;

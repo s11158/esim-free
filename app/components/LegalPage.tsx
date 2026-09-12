@@ -59,7 +59,7 @@ export default function LegalPage({ eyebrow, title, lead, children }: LegalPageP
         </div>
         <div className="shell legal-row">
           <span>© 2026 Esim.free</span>
-          <span>Contact: staskochukov@gmail.com</span>
+          <span>Contact: support@esim.free</span>
         </div>
       </footer>
     </main>

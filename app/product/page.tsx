@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import LegalPage from "../components/LegalPage";
 
 export const metadata: Metadata = {
-  title: "Product and delivery — Esim.free",
+  title: "Product and delivery - Esim.free",
   description: "What Esim.free sells, how prepaid travel eSIM products are delivered and what customers need to use them.",
   alternates: { canonical: "/product/" },
 };
@@ -51,7 +51,7 @@ export default function ProductPage() {
 
       <section>
         <h2>Support</h2>
-        <p>For plan selection, delivery, installation, connectivity or refund questions, use the <a href="/contact/">contact page</a> or email <a href="mailto:staskochukov@gmail.com">staskochukov@gmail.com</a>.</p>
+        <p>For plan selection, delivery, installation, connectivity or refund questions, use the <a href="/contact/">contact page</a> or email <a href="mailto:support@esim.free">support@esim.free</a>.</p>
       </section>
     </LegalPage>
   );

@@ -585,7 +585,7 @@ export default function Home() {
         </div>
         <div className="shell legal-row">
           <span>© 2026 Esim.free</span>
-          <span>{t.legal} · staskochukov@gmail.com</span>
+          <span>{t.legal} · support@esim.free</span>
         </div>
       </footer>
     </main>

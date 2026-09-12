@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import LegalPage from "../components/LegalPage";
 
-export const metadata: Metadata = { title: "Terms of service — Esim.free", description: "Terms governing purchases of travel eSIM plans from Esim.free.", alternates: { canonical: "/terms/" } };
+export const metadata: Metadata = { title: "Terms of service - Esim.free", description: "Terms governing purchases of travel eSIM plans from Esim.free.", alternates: { canonical: "/terms/" } };
 
 export default function TermsPage() {
   return (
@@ -16,7 +16,7 @@ export default function TermsPage() {
       <section><h2>8. Refunds</h2><p>Refund eligibility is governed by our <a href="/refunds/">Refund Policy</a>. Nothing in these Terms limits non-waivable consumer rights that apply to you.</p></section>
       <section><h2>9. Liability</h2><p>To the maximum extent permitted by law, Esim.free is not responsible for indirect or consequential loss, loss caused by an incompatible or locked device, incorrect installation, local network outages or use outside the purchased coverage. Our aggregate liability for a claim will not exceed the amount paid for the affected plan, except where law requires otherwise.</p></section>
       <section><h2>10. Upstream connectivity</h2><p>We source mobile connectivity and eSIM provisioning from third-party network and technology suppliers. Esim.free remains the customer-facing seller and support contact for products purchased from this website. Local mobile operators and provisioning suppliers may apply technical network rules needed to provide the purchased plan.</p></section>
-      <section><h2>11. Changes and contact</h2><p>We may update these Terms for future orders. The version in force when you order applies to that transaction. Questions may be sent to <a href="mailto:staskochukov@gmail.com">staskochukov@gmail.com</a>.</p></section>
+      <section><h2>11. Changes and contact</h2><p>We may update these Terms for future orders. The version in force when you order applies to that transaction. Questions may be sent to <a href="mailto:support@esim.free">support@esim.free</a>.</p></section>
     </LegalPage>
   );
 }
