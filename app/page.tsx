@@ -96,6 +96,88 @@ function countryName(code: string, language: Language) {
   }
 }
 
+// Поиск должен находить страну на любом языке, а не только на языке интерфейса:
+// "turkey" при русском интерфейсе обязан найти Турцию. Сравниваем без регистра и
+// без диакритики (Türkei и Turkei равны), по началу слова и по вхождению.
+function normalizeQuery(text: string) {
+  return text.normalize("NFD").replace(/\p{M}+/gu, "").toLowerCase().trim();
+}
+
+// Английские алиасы, которых нет в CLDR: там Турция уже "Türkiye", Чехия "Czechia",
+// а люди по-прежнему набирают Turkey, Czech Republic, UK, USA, UAE, Holland.
+const COUNTRY_ALIASES: Record<string, string[]> = {
+  TR: ["turkey", "turkiye"],
+  CZ: ["czech republic", "czechia"],
+  GB: ["uk", "united kingdom", "great britain", "britain", "england", "scotland", "wales"],
+  US: ["usa", "united states", "america", "us"],
+  AE: ["uae", "emirates", "dubai", "abu dhabi", "united arab emirates"],
+  KR: ["south korea", "korea"],
+  KP: ["north korea"],
+  RU: ["russia"],
+  NL: ["holland", "netherlands"],
+  MM: ["burma", "myanmar"],
+  SZ: ["swaziland", "eswatini"],
+  MK: ["macedonia", "north macedonia"],
+  CV: ["cape verde", "cabo verde"],
+  TL: ["east timor", "timor-leste"],
+  CI: ["ivory coast", "cote d'ivoire"],
+  VN: ["vietnam", "viet nam"],
+  LA: ["laos"],
+  MO: ["macau", "macao"],
+  HK: ["hong kong"],
+  CN: ["china"],
+  TW: ["taiwan"],
+  IR: ["iran"],
+  SY: ["syria"],
+  BN: ["brunei"],
+  BO: ["bolivia"],
+  VE: ["venezuela"],
+  TZ: ["tanzania"],
+  CD: ["congo kinshasa", "drc", "dr congo"],
+  CG: ["congo brazzaville"],
+  FM: ["micronesia"],
+  VA: ["vatican"],
+  PS: ["palestine"],
+  XK: ["kosovo"],
+};
+
+function buildCountryIndex(codes: string[], catalogNames: Map<string, string>) {
+  const locales = Object.values(LANGUAGES).map((item) => item.locale);
+  const displayNames = locales.flatMap((locale) => {
+    try {
+      return [new Intl.DisplayNames([locale], { type: "region" })];
+    } catch {
+      return [];
+    }
+  });
+  const index = new Map<string, string[]>();
+  for (const code of codes) {
+    const names = new Set<string>([code.toLowerCase()]);
+    for (const alias of COUNTRY_ALIASES[code] ?? []) names.add(normalizeQuery(alias));
+    const catalogName = catalogNames.get(code);
+    if (catalogName) names.add(normalizeQuery(catalogName));
+    for (const names_ of displayNames) {
+      try {
+        const name = names_.of(code);
+        if (name && name !== code) names.add(normalizeQuery(name));
+      } catch {}
+    }
+    index.set(code, [...names]);
+  }
+  return index;
+}
+
+function matchScore(names: string[], query: string) {
+  let best = 0;
+  for (const name of names) {
+    if (name === query) return 3;
+    if (name.startsWith(query)) best = Math.max(best, 2);
+    else if (name.split(/[\s-]+/).some((word) => word.startsWith(query))) best = Math.max(best, 2);
+    else if (name.includes(query)) best = Math.max(best, 1);
+  }
+  return best;
+}
+
 function formatData(plan: Plan, t: Messages) {
   if (plan.unlimited) return t.unlimited;
   if (plan.gb < 1) return `${Math.round(plan.gb * 1024)} ${t.mb}`;
@@ -214,6 +296,13 @@ export default function Home() {
     [countryCodes, language],
   );
 
+  // Названия на всех 12 языках строятся один раз на список кодов, а не при смене языка.
+  const countryIndex = useMemo(() => {
+    const catalogNames = new Map<string, string>();
+    for (const plan of plans) if (plan.scope === "country" && plan.destName) catalogNames.set(plan.dest, plan.destName);
+    return buildCountryIndex(countryCodes, catalogNames);
+  }, [countryCodes, plans]);
+
   const rate = rates[currency] ?? FALLBACK_RATES[currency] ?? 1;
 
   function priceLabel(usd: number) {
@@ -303,13 +392,30 @@ export default function Home() {
     window.localStorage.setItem("esim-theme", nextTheme);
   }
 
-  const searchLower = search.trim().toLowerCase();
+  const searchLower = normalizeQuery(search);
   const filteredRegions = regionDests.filter(
-    (region) => !searchLower || region.name.toLowerCase().includes(searchLower),
+    (region) => !searchLower || matchScore([normalizeQuery(region.name)], searchLower) > 0,
   );
-  const filteredCountries = localizedCountries.filter(
-    (country) => !searchLower || country.name.toLowerCase().includes(searchLower) || country.code.toLowerCase() === searchLower,
-  );
+  const filteredCountries = searchLower
+    ? localizedCountries
+        .map((country) => ({ ...country, score: matchScore(countryIndex.get(country.code) ?? [], searchLower) }))
+        .filter((country) => country.score > 0)
+        .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name, LANGUAGES[language].locale))
+    : localizedCountries;
+  const nothingFound = searchLower.length > 0 && filteredCountries.length === 0 && filteredRegions.length === 0;
+
+  // Enter по подсказке всегда добавляет страну, а не переключает: если она уже выбрана,
+  // просто очищаем поле, иначе повторный Enter снимал бы выбор.
+  function pickFirstMatch() {
+    if (filteredCountries.length > 0) {
+      const code = filteredCountries[0].code;
+      const alreadySelected = selection.type === "countries" && selection.codes.includes(code);
+      if (!alreadySelected) toggleCountry(code);
+      setSearch("");
+      return;
+    }
+    if (filteredRegions.length > 0) pickDest(filteredRegions[0].code);
+  }
 
   const selectionLabel =
     selection.type === "dest"
@@ -399,14 +505,23 @@ export default function Home() {
                 <input
                   value={search}
                   placeholder={t.countrySearch}
+                  autoComplete="off"
+                  role="combobox"
+                  aria-expanded={pickerOpen}
+                  aria-autocomplete="list"
                   onFocus={() => setPickerOpen(true)}
                   onChange={(event) => { setSearch(event.target.value); setPickerOpen(true); }}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") { event.preventDefault(); pickFirstMatch(); }
+                    if (event.key === "Escape") setPickerOpen(false);
+                  }}
                 />
               </div>
               {pickerOpen && (
                 <div className="picker-drop">
+                  {nothingFound && <p className="picker-empty">{t.noMatches}</p>}
                   {filteredRegions.length > 0 && (
-                    <>
+                    <div className={`picker-regions${searchLower ? " picker-regions-after" : ""}`}>
                       <p className="picker-group">{t.regionsGroup}</p>
                       {filteredRegions.map((region) => (
                         <button key={region.code} type="button" className="picker-item" onClick={() => pickDest(region.code)}>
@@ -415,20 +530,24 @@ export default function Home() {
                           <em>{t.coversLabel.replace("{count}", String(region.coverage))}</em>
                         </button>
                       ))}
-                    </>
+                    </div>
                   )}
-                  <p className="picker-group">{t.countriesGroup}</p>
-                  {filteredCountries.slice(0, 60).map((country) => (
-                    <button
-                      key={country.code}
-                      type="button"
-                      className={`picker-item${selection.type === "countries" && selection.codes.includes(country.code) ? " active" : ""}`}
-                      onClick={() => toggleCountry(country.code)}
-                    >
-                      <b aria-hidden="true">{flagEmoji(country.code)}</b>
-                      <span>{country.name}</span>
-                    </button>
-                  ))}
+                  {filteredCountries.length > 0 && (
+                    <div className="picker-countries">
+                      <p className="picker-group">{t.countriesGroup}</p>
+                      {filteredCountries.slice(0, 60).map((country) => (
+                        <button
+                          key={country.code}
+                          type="button"
+                          className={`picker-item${selection.type === "countries" && selection.codes.includes(country.code) ? " active" : ""}`}
+                          onClick={() => toggleCountry(country.code)}
+                        >
+                          <b aria-hidden="true">{flagEmoji(country.code)}</b>
+                          <span>{country.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
               {selection.type === "countries" && selection.codes.length > 1 && (

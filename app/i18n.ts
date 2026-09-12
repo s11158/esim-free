@@ -89,6 +89,7 @@ export type Messages = {
   countriesGroup: string;
   coversLabel: string;
   multiHint: string;
+  noMatches: string;
   tripDays: string;
   dataNeeded: string;
   maxPrice: string;
@@ -123,7 +124,7 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "How does Esim.free make money?", answer: "We buy connectivity from upstream suppliers and include a transparent retail margin in the displayed price. Your purchase, delivery and support are handled by Esim.free." },
     ],
     footerTagline: "The shortest route to affordable connectivity.", help: "Help", legal: "Products are sold and fulfilled by Esim.free.", world: "Worldwide", countries180: "180 countries", lifetime: "No expiry", days: "days", gb: "GB", mb: "MB",
-    currencyLabel: "Currency", countrySearch: "Country or region...", regionsGroup: "Regions and multi-country", countriesGroup: "Countries", coversLabel: "{count} countries", multiHint: "Showing plans that cover every selected country.", tripDays: "Trip length", dataNeeded: "Data needed", maxPrice: "Budget", noLimit: "no limit", extrasLabel: "Calls and SMS", extrasAny: "All plans", extrasData: "Data only", extrasVoice: "With minutes and SMS", minutesShort: "min",
+    currencyLabel: "Currency", countrySearch: "Country or region...", regionsGroup: "Regions and multi-country", countriesGroup: "Countries", coversLabel: "{count} countries", multiHint: "Showing plans that cover every selected country.", noMatches: "Nothing found. Try another spelling or the English name.", tripDays: "Trip length", dataNeeded: "Data needed", maxPrice: "Budget", noLimit: "no limit", extrasLabel: "Calls and SMS", extrasAny: "All plans", extrasData: "Data only", extrasVoice: "With minutes and SMS", minutesShort: "min",
   },
   ru: {
     metaTitle: "Esim.free - самая дешёвая eSIM для поездки", metaDescription: "Купите недорогую туристическую eSIM напрямую у Esim.free.",
@@ -143,7 +144,7 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Как Esim.free зарабатывает?", answer: "Мы закупаем связь у поставщиков и включаем прозрачную розничную маржу в указанную цену. Продажу, доставку и поддержку выполняет Esim.free." },
     ],
     footerTagline: "Самый короткий путь к дешёвой связи.", help: "Помощь", legal: "Тарифы продаёт и обслуживает Esim.free.", world: "Весь мир", countries180: "180 стран", lifetime: "Без срока", days: "дн.", gb: "ГБ", mb: "МБ",
-    currencyLabel: "Валюта", countrySearch: "Страна или регион...", regionsGroup: "Регионы и мультистрановые", countriesGroup: "Страны", coversLabel: "{count} стран", multiHint: "Показаны тарифы, покрывающие все выбранные страны.", tripDays: "Длительность поездки", dataNeeded: "Нужно интернета", maxPrice: "Бюджет", noLimit: "без ограничения", extrasLabel: "Звонки и SMS", extrasAny: "Все тарифы", extrasData: "Только интернет", extrasVoice: "С минутами и SMS", minutesShort: "мин",
+    currencyLabel: "Валюта", countrySearch: "Страна или регион...", regionsGroup: "Регионы и мультистрановые", countriesGroup: "Страны", coversLabel: "{count} стран", multiHint: "Показаны тарифы, покрывающие все выбранные страны.", noMatches: "Ничего не найдено. Попробуйте другое написание или название по-английски.", tripDays: "Длительность поездки", dataNeeded: "Нужно интернета", maxPrice: "Бюджет", noLimit: "без ограничения", extrasLabel: "Звонки и SMS", extrasAny: "Все тарифы", extrasData: "Только интернет", extrasVoice: "С минутами и SMS", minutesShort: "мин",
   },
   es: {
     metaTitle: "Esim.free - encuentra la eSIM más barata", metaDescription: "Compra planes eSIM de viaje directamente a Esim.free, con precios claros y cobertura mundial.",
@@ -163,7 +164,7 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "¿Cómo gana dinero Esim.free?", answer: "Compramos conectividad a proveedores mayoristas e incluimos un margen minorista transparente en el precio mostrado. Esim.free gestiona la venta, entrega y soporte." },
     ],
     footerTagline: "El camino más corto hacia una conexión asequible.", help: "Ayuda", legal: "Los productos son vendidos y entregados por Esim.free.", world: "Todo el mundo", countries180: "180 países", lifetime: "Sin caducidad", days: "días", gb: "GB", mb: "MB",
-    currencyLabel: "Moneda", countrySearch: "País o región...", regionsGroup: "Regiones y multipaís", countriesGroup: "Países", coversLabel: "{count} países", multiHint: "Se muestran planes que cubren todos los países seleccionados.", tripDays: "Duración del viaje", dataNeeded: "Datos necesarios", maxPrice: "Presupuesto", noLimit: "sin límite", extrasLabel: "Llamadas y SMS", extrasAny: "Todos los planes", extrasData: "Solo datos", extrasVoice: "Con minutos y SMS", minutesShort: "min",
+    currencyLabel: "Moneda", countrySearch: "País o región...", regionsGroup: "Regiones y multipaís", countriesGroup: "Países", coversLabel: "{count} países", multiHint: "Se muestran planes que cubren todos los países seleccionados.", noMatches: "No se encontró nada. Prueba otra grafía o el nombre en inglés.", tripDays: "Duración del viaje", dataNeeded: "Datos necesarios", maxPrice: "Presupuesto", noLimit: "sin límite", extrasLabel: "Llamadas y SMS", extrasAny: "Todos los planes", extrasData: "Solo datos", extrasVoice: "Con minutos y SMS", minutesShort: "min",
   },
   fr: {
     metaTitle: "Esim.free - trouvez l’eSIM la moins chère", metaDescription: "Achetez directement auprès d’Esim.free des forfaits eSIM de voyage à prix clair et couverture mondiale.",
@@ -183,7 +184,7 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Comment Esim.free gagne de l’argent ?", answer: "Nous achetons la connectivité auprès de fournisseurs en gros et intégrons une marge transparente au prix affiché. Esim.free assure la vente, la livraison et l’assistance." },
     ],
     footerTagline: "Le chemin le plus court vers une connexion abordable.", help: "Aide", legal: "Les produits sont vendus et livrés par Esim.free.", world: "Monde entier", countries180: "180 pays", lifetime: "Sans expiration", days: "jours", gb: "Go", mb: "Mo",
-    currencyLabel: "Devise", countrySearch: "Pays ou région...", regionsGroup: "Régions et multi-pays", countriesGroup: "Pays", coversLabel: "{count} pays", multiHint: "Forfaits couvrant tous les pays sélectionnés.", tripDays: "Durée du voyage", dataNeeded: "Données nécessaires", maxPrice: "Budget", noLimit: "sans limite", extrasLabel: "Appels et SMS", extrasAny: "Tous les forfaits", extrasData: "Données seulement", extrasVoice: "Avec minutes et SMS", minutesShort: "min",
+    currencyLabel: "Devise", countrySearch: "Pays ou région...", regionsGroup: "Régions et multi-pays", countriesGroup: "Pays", coversLabel: "{count} pays", multiHint: "Forfaits couvrant tous les pays sélectionnés.", noMatches: "Aucun résultat. Essayez une autre orthographe ou le nom en anglais.", tripDays: "Durée du voyage", dataNeeded: "Données nécessaires", maxPrice: "Budget", noLimit: "sans limite", extrasLabel: "Appels et SMS", extrasAny: "Tous les forfaits", extrasData: "Données seulement", extrasVoice: "Avec minutes et SMS", minutesShort: "min",
   },
   de: {
     metaTitle: "Esim.free - die günstigste eSIM für deine Reise", metaDescription: "Kaufe Reiseziel-eSIMs mit klaren Preisen und weltweiter Abdeckung direkt bei Esim.free.",
@@ -203,7 +204,7 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Wie verdient Esim.free Geld?", answer: "Wir kaufen Konnektivität im Großhandel und rechnen eine transparente Handelsspanne in den angezeigten Preis ein. Verkauf, Lieferung und Support erfolgen durch Esim.free." },
     ],
     footerTagline: "Der kürzeste Weg zu günstiger Verbindung.", help: "Hilfe", legal: "Produkte werden von Esim.free verkauft und geliefert.", world: "Weltweit", countries180: "180 Länder", lifetime: "Kein Ablauf", days: "Tage", gb: "GB", mb: "MB",
-    currencyLabel: "Währung", countrySearch: "Land oder Region...", regionsGroup: "Regionen und Multi-Land", countriesGroup: "Länder", coversLabel: "{count} Länder", multiHint: "Angezeigt werden Tarife, die alle gewählten Länder abdecken.", tripDays: "Reisedauer", dataNeeded: "Benötigte Daten", maxPrice: "Budget", noLimit: "ohne Limit", extrasLabel: "Anrufe und SMS", extrasAny: "Alle Tarife", extrasData: "Nur Daten", extrasVoice: "Mit Minuten und SMS", minutesShort: "Min",
+    currencyLabel: "Währung", countrySearch: "Land oder Region...", regionsGroup: "Regionen und Multi-Land", countriesGroup: "Länder", coversLabel: "{count} Länder", multiHint: "Angezeigt werden Tarife, die alle gewählten Länder abdecken.", noMatches: "Nichts gefunden. Versuchen Sie eine andere Schreibweise oder den englischen Namen.", tripDays: "Reisedauer", dataNeeded: "Benötigte Daten", maxPrice: "Budget", noLimit: "ohne Limit", extrasLabel: "Anrufe und SMS", extrasAny: "Alle Tarife", extrasData: "Nur Daten", extrasVoice: "Mit Minuten und SMS", minutesShort: "Min",
   },
   pt: {
     metaTitle: "Esim.free - encontre o eSIM mais barato", metaDescription: "Compre planos eSIM de viagem diretamente da Esim.free, com preços claros e cobertura mundial.",
@@ -223,7 +224,7 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Como o Esim.free ganha dinheiro?", answer: "Compramos conectividade de fornecedores no atacado e incluímos uma margem transparente no preço exibido. A Esim.free cuida da venda, entrega e suporte." },
     ],
     footerTagline: "O caminho mais curto para uma conexão acessível.", help: "Ajuda", legal: "Os produtos são vendidos e entregues pela Esim.free.", world: "Mundo todo", countries180: "180 países", lifetime: "Sem validade", days: "dias", gb: "GB", mb: "MB",
-    currencyLabel: "Moeda", countrySearch: "País ou região...", regionsGroup: "Regiões e multipaís", countriesGroup: "Países", coversLabel: "{count} países", multiHint: "Mostrando planos que cobrem todos os países selecionados.", tripDays: "Duração da viagem", dataNeeded: "Dados necessários", maxPrice: "Orçamento", noLimit: "sem limite", extrasLabel: "Chamadas e SMS", extrasAny: "Todos os planos", extrasData: "Somente dados", extrasVoice: "Com minutos e SMS", minutesShort: "min",
+    currencyLabel: "Moeda", countrySearch: "País ou região...", regionsGroup: "Regiões e multipaís", countriesGroup: "Países", coversLabel: "{count} países", multiHint: "Mostrando planos que cobrem todos os países selecionados.", noMatches: "Nada encontrado. Tente outra grafia ou o nome em inglês.", tripDays: "Duração da viagem", dataNeeded: "Dados necessários", maxPrice: "Orçamento", noLimit: "sem limite", extrasLabel: "Chamadas e SMS", extrasAny: "Todos os planos", extrasData: "Somente dados", extrasVoice: "Com minutos e SMS", minutesShort: "min",
   },
   ar: {
     metaTitle: "Esim.free - اعثر على أرخص شريحة eSIM", metaDescription: "اشترِ باقات eSIM للسفر مباشرة من Esim.free بأسعار واضحة وتغطية عالمية.",
@@ -243,7 +244,7 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "كيف يربح Esim.free؟", answer: "نشتري الاتصال بالجملة من الموردين ونضيف هامش بيع شفافاً إلى السعر المعروض. تتولى Esim.free البيع والتسليم والدعم." },
     ],
     footerTagline: "أقصر طريق إلى اتصال بسعر مناسب.", help: "المساعدة", legal: "تبيع Esim.free المنتجات وتقوم بتسليمها.", world: "حول العالم", countries180: "180 دولة", lifetime: "بلا انتهاء", days: "يوم", gb: "GB", mb: "MB",
-    currencyLabel: "العملة", countrySearch: "دولة أو منطقة...", regionsGroup: "مناطق وباقات متعددة الدول", countriesGroup: "الدول", coversLabel: "{count} دولة", multiHint: "تظهر الباقات التي تغطي كل الدول المختارة.", tripDays: "مدة الرحلة", dataNeeded: "حجم البيانات المطلوب", maxPrice: "الميزانية", noLimit: "بلا حد", extrasLabel: "مكالمات وSMS", extrasAny: "كل الباقات", extrasData: "بيانات فقط", extrasVoice: "مع دقائق وSMS", minutesShort: "دقيقة",
+    currencyLabel: "العملة", countrySearch: "دولة أو منطقة...", regionsGroup: "مناطق وباقات متعددة الدول", countriesGroup: "الدول", coversLabel: "{count} دولة", multiHint: "تظهر الباقات التي تغطي كل الدول المختارة.", noMatches: "لم يتم العثور على شيء. جرّب كتابة أخرى أو الاسم بالإنجليزية.", tripDays: "مدة الرحلة", dataNeeded: "حجم البيانات المطلوب", maxPrice: "الميزانية", noLimit: "بلا حد", extrasLabel: "مكالمات وSMS", extrasAny: "كل الباقات", extrasData: "بيانات فقط", extrasVoice: "مع دقائق وSMS", minutesShort: "دقيقة",
   },
   tr: {
     metaTitle: "Esim.free - seyahatiniz için en ucuz eSIM", metaDescription: "Şeffaf fiyatlı ve dünya çapında kapsamalı seyahat eSIM paketlerini doğrudan Esim.free’dan satın alın.",
@@ -263,7 +264,7 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Esim.free nasıl para kazanıyor?", answer: "Bağlantıyı toptan tedarikçilerden alır ve gösterilen fiyata şeffaf bir perakende marjı ekleriz. Satış, teslimat ve destek Esim.free tarafından sağlanır." },
     ],
     footerTagline: "Uygun fiyatlı bağlantıya en kısa yol.", help: "Yardım", legal: "Ürünler Esim.free tarafından satılır ve teslim edilir.", world: "Dünya çapında", countries180: "180 ülke", lifetime: "Süresiz", days: "gün", gb: "GB", mb: "MB",
-    currencyLabel: "Para birimi", countrySearch: "Ülke veya bölge...", regionsGroup: "Bölgeler ve çok ülkeli", countriesGroup: "Ülkeler", coversLabel: "{count} ülke", multiHint: "Seçilen tüm ülkeleri kapsayan paketler gösteriliyor.", tripDays: "Seyahat süresi", dataNeeded: "Gereken internet", maxPrice: "Bütçe", noLimit: "sınırsız", extrasLabel: "Arama ve SMS", extrasAny: "Tüm paketler", extrasData: "Yalnızca internet", extrasVoice: "Dakika ve SMS ile", minutesShort: "dk",
+    currencyLabel: "Para birimi", countrySearch: "Ülke veya bölge...", regionsGroup: "Bölgeler ve çok ülkeli", countriesGroup: "Ülkeler", coversLabel: "{count} ülke", multiHint: "Seçilen tüm ülkeleri kapsayan paketler gösteriliyor.", noMatches: "Sonuç yok. Farklı bir yazım veya İngilizce adı deneyin.", tripDays: "Seyahat süresi", dataNeeded: "Gereken internet", maxPrice: "Bütçe", noLimit: "sınırsız", extrasLabel: "Arama ve SMS", extrasAny: "Tüm paketler", extrasData: "Yalnızca internet", extrasVoice: "Dakika ve SMS ile", minutesShort: "dk",
   },
   zh: {
     metaTitle: "Esim.free - 找到旅行中最便宜的 eSIM", metaDescription: "直接从 Esim.free 购买价格透明、覆盖全球的旅行 eSIM 套餐。",
@@ -283,7 +284,7 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Esim.free 如何盈利？", answer: "我们从上游供应商批量采购连接服务，并在所示价格中加入透明的零售利润。销售、交付和支持均由 Esim.free 负责。" },
     ],
     footerTagline: "实惠上网的最短路径。", help: "帮助", legal: "产品由 Esim.free 销售并交付。", world: "全球", countries180: "180 个国家", lifetime: "永久有效", days: "天", gb: "GB", mb: "MB",
-    currencyLabel: "货币", countrySearch: "国家或地区...", regionsGroup: "区域及多国套餐", countriesGroup: "国家", coversLabel: "覆盖 {count} 个国家", multiHint: "正在显示覆盖所有所选国家的套餐。", tripDays: "行程天数", dataNeeded: "所需流量", maxPrice: "预算", noLimit: "不限", extrasLabel: "通话和短信", extrasAny: "全部套餐", extrasData: "仅流量", extrasVoice: "含通话和短信", minutesShort: "分钟",
+    currencyLabel: "货币", countrySearch: "国家或地区...", regionsGroup: "区域及多国套餐", countriesGroup: "国家", coversLabel: "覆盖 {count} 个国家", multiHint: "正在显示覆盖所有所选国家的套餐。", noMatches: "未找到结果。请尝试其他拼写或英文名称。", tripDays: "行程天数", dataNeeded: "所需流量", maxPrice: "预算", noLimit: "不限", extrasLabel: "通话和短信", extrasAny: "全部套餐", extrasData: "仅流量", extrasVoice: "含通话和短信", minutesShort: "分钟",
   },
   ja: {
     metaTitle: "Esim.free - 旅行先で最安のeSIMを検索", metaDescription: "透明な価格の旅行用eSIMをEsim.freeから直接購入できます。",
@@ -303,7 +304,7 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Esim.freeの収益源は？", answer: "上流サプライヤーから通信を卸仕入れし、表示価格に透明な小売マージンを含めています。販売、納品、サポートはEsim.freeが行います。" },
     ],
     footerTagline: "手頃な通信への最短ルート。", help: "ヘルプ", legal: "商品はEsim.freeが販売・提供します。", world: "世界中", countries180: "180か国", lifetime: "期限なし", days: "日", gb: "GB", mb: "MB",
-    currencyLabel: "通貨", countrySearch: "国名または地域...", regionsGroup: "地域・複数国プラン", countriesGroup: "国", coversLabel: "{count}か国対応", multiHint: "選択したすべての国をカバーするプランを表示しています。", tripDays: "旅行日数", dataNeeded: "必要なデータ量", maxPrice: "予算", noLimit: "上限なし", extrasLabel: "通話・SMS", extrasAny: "すべてのプラン", extrasData: "データのみ", extrasVoice: "通話・SMS付き", minutesShort: "分",
+    currencyLabel: "通貨", countrySearch: "国名または地域...", regionsGroup: "地域・複数国プラン", countriesGroup: "国", coversLabel: "{count}か国対応", multiHint: "選択したすべての国をカバーするプランを表示しています。", noMatches: "見つかりませんでした。別の表記か英語名をお試しください。", tripDays: "旅行日数", dataNeeded: "必要なデータ量", maxPrice: "予算", noLimit: "上限なし", extrasLabel: "通話・SMS", extrasAny: "すべてのプラン", extrasData: "データのみ", extrasVoice: "通話・SMS付き", minutesShort: "分",
   },
   ko: {
     metaTitle: "Esim.free - 여행용 최저가 eSIM 찾기", metaDescription: "투명한 가격의 여행용 eSIM을 Esim.free에서 직접 구매하세요.",
@@ -323,7 +324,7 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Esim.free는 어떻게 수익을 내나요?", answer: "상위 공급업체에서 연결 서비스를 도매로 구매하고 표시 가격에 투명한 소매 마진을 포함합니다. 판매, 배송 및 지원은 Esim.free가 담당합니다." },
     ],
     footerTagline: "합리적인 연결로 가는 가장 짧은 길.", help: "도움말", legal: "상품은 Esim.free가 판매하고 제공합니다.", world: "전 세계", countries180: "180개국", lifetime: "만료 없음", days: "일", gb: "GB", mb: "MB",
-    currencyLabel: "통화", countrySearch: "국가 또는 지역...", regionsGroup: "지역 및 다국가 요금제", countriesGroup: "국가", coversLabel: "{count}개국 지원", multiHint: "선택한 모든 국가를 지원하는 요금제를 표시합니다.", tripDays: "여행 기간", dataNeeded: "필요한 데이터", maxPrice: "예산", noLimit: "제한 없음", extrasLabel: "통화 및 SMS", extrasAny: "전체 요금제", extrasData: "데이터 전용", extrasVoice: "통화·SMS 포함", minutesShort: "분",
+    currencyLabel: "통화", countrySearch: "국가 또는 지역...", regionsGroup: "지역 및 다국가 요금제", countriesGroup: "국가", coversLabel: "{count}개국 지원", multiHint: "선택한 모든 국가를 지원하는 요금제를 표시합니다.", noMatches: "검색 결과가 없습니다. 다른 표기나 영어 이름을 입력해 보세요.", tripDays: "여행 기간", dataNeeded: "필요한 데이터", maxPrice: "예산", noLimit: "제한 없음", extrasLabel: "통화 및 SMS", extrasAny: "전체 요금제", extrasData: "데이터 전용", extrasVoice: "통화·SMS 포함", minutesShort: "분",
   },
   hi: {
     metaTitle: "Esim.free - यात्रा के लिए सबसे सस्ती eSIM", metaDescription: "पारदर्शी कीमत पर यात्रा eSIM सीधे Esim.free से खरीदें।",
@@ -343,7 +344,7 @@ export const MESSAGES: Record<Language, Messages> = {
       { question: "Esim.free पैसे कैसे कमाता है?", answer: "हम अपस्ट्रीम सप्लायर से कनेक्टिविटी थोक में खरीदते हैं और दिखाए गए मूल्य में पारदर्शी खुदरा मार्जिन शामिल करते हैं। बिक्री, डिलीवरी और सहायता Esim.free संभालता है।" },
     ],
     footerTagline: "किफ़ायती कनेक्टिविटी का सबसे छोटा रास्ता।", help: "मदद", legal: "उत्पाद Esim.free द्वारा बेचे और डिलीवर किए जाते हैं।", world: "दुनिया भर में", countries180: "180 देश", lifetime: "कोई समाप्ति नहीं", days: "दिन", gb: "GB", mb: "MB",
-    currencyLabel: "मुद्रा", countrySearch: "देश या क्षेत्र...", regionsGroup: "क्षेत्र और बहु-देशीय", countriesGroup: "देश", coversLabel: "{count} देश", multiHint: "चुने गए सभी देशों को कवर करने वाले प्लान दिख रहे हैं।", tripDays: "यात्रा की अवधि", dataNeeded: "आवश्यक डेटा", maxPrice: "बजट", noLimit: "कोई सीमा नहीं", extrasLabel: "कॉल और SMS", extrasAny: "सभी प्लान", extrasData: "केवल डेटा", extrasVoice: "मिनट और SMS सहित", minutesShort: "मिनट",
+    currencyLabel: "मुद्रा", countrySearch: "देश या क्षेत्र...", regionsGroup: "क्षेत्र और बहु-देशीय", countriesGroup: "देश", coversLabel: "{count} देश", multiHint: "चुने गए सभी देशों को कवर करने वाले प्लान दिख रहे हैं।", noMatches: "कुछ नहीं मिला। दूसरी वर्तनी या अंग्रेज़ी नाम आज़माएँ।", tripDays: "यात्रा की अवधि", dataNeeded: "आवश्यक डेटा", maxPrice: "बजट", noLimit: "कोई सीमा नहीं", extrasLabel: "कॉल और SMS", extrasAny: "सभी प्लान", extrasData: "केवल डेटा", extrasVoice: "मिनट और SMS सहित", minutesShort: "मिनट",
   },
 };
 

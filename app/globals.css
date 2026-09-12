@@ -403,3 +403,25 @@ footer { border-top: 1px solid var(--line); background: var(--surface); }
 .currency-switcher select { width: 64px; }
 @media (max-width: 1120px) { .finder-panel { grid-template-columns: repeat(3, 1fr); } .picker-field { grid-column: 1 / -1; } }
 @media (max-width: 640px) { .finder-panel { grid-template-columns: 1fr; } }
+
+/* Подбор тарифа: поле страны во всю ширину первой строкой, остальные фильтры второй
+   строкой и без обрезки текста. Раньше сетка была жёстко нарезана на шесть колонок,
+   из-за чего подпись бюджета переносилась, а выпадающий список сортировки обрезался. */
+.finder-panel { grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); }
+.finder-panel .picker-field { grid-column: 1 / -1; padding-block: 20px 18px; }
+.finder-panel .field > span { white-space: normal; line-height: 1.35; }
+.finder-panel .select-wrap { min-width: 0; }
+.finder-panel .select-wrap select { width: 100%; min-width: 0; max-width: 100%; }
+.picker-box input { font-size: 19px; min-width: 220px; padding-block: 4px; }
+.picker-drop { max-height: 380px; }
+.picker-empty { margin: 10px 8px 6px; color: var(--muted); font-size: 13px; line-height: 1.45; }
+.picker-item em { white-space: nowrap; }
+@media (max-width: 640px) { .picker-box input { font-size: 17px; min-width: 140px; } }
+/* При поиске совпавшие страны показываем выше регионов: по короткому запросу вроде "tr"
+   регионы ("Australia & Asia") иначе заслоняли собой точное попадание в Турцию. */
+.picker-drop { display: flex; flex-direction: column; }
+.picker-regions-after { order: 2; }
+/* Вторая строка подбора: ровно пять полей на всю ширину, без пустых ячеек. */
+.finder-panel { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+@media (max-width: 1120px) { .finder-panel { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .finder-panel { grid-template-columns: 1fr; } }
