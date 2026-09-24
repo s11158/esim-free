@@ -29,6 +29,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           }}
         />
         <script defer src="https://tlnt.ae/a.js" data-ym="113012376" data-name="esim.free"></script>
+        <meta name="yandex-verification" content="c513731d6cc6a563" />
       </head>
       <body>{children}</body>
     </html>
