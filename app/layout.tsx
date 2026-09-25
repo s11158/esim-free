@@ -28,7 +28,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             __html: `try{if(localStorage.getItem("esim-theme")==="dark")document.documentElement.dataset.theme="dark";var s=["en","ru","es","fr","de","pt","ar","tr","zh","ja","ko","hi"],l=localStorage.getItem("esim-language");if(!s.includes(l)){l=(navigator.languages||[navigator.language]).map(function(v){return v.toLowerCase().split("-")[0]}).find(function(v){return s.includes(v)})||"en"}document.documentElement.lang=l;document.documentElement.dir=l==="ar"?"rtl":"ltr";document.documentElement.dataset.language=l}catch(e){}`,
           }}
         />
-        <script defer src="https://tlnt.ae/a.js" data-ym="113012376" data-ga="G-Y6XFXGFVG8" data-name="esim.free"></script>
+        <script defer src="https://tlnt.ae/a.js" data-ym="113012376" data-ga="G-Y6XFXGFVG8" data-meta="1084882607479845" data-name="esim.free"></script>
         <meta name="yandex-verification" content="c513731d6cc6a563" />
       </head>
       <body>{children}</body>
